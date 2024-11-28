@@ -21,10 +21,10 @@ public class MainController {
         return "home";
     }
 
-    @PostMapping("/submit-name")
-    public String submitName(@RequestParam String name, Model model) {
-        User user = new User(name);
-        userService.createUser(user);
-        return "home";
-    }
+//    @PostMapping("/submit-name")
+//    public String submitName(@RequestParam String name, Model model) {
+//        User user = new User(name);
+//        userService.createUser(user);
+//        return "home";
+//    }
 }
