@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class BookRequest {
+
+    @JsonProperty("id")
+    private Integer id;
+
     @JsonProperty("name")
     private String name;
 
@@ -39,7 +43,12 @@ public class BookRequest {
     @JsonProperty("genres")
     private Set<Integer> genres;
 
-
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     // Getters и Setters
     public String getName() {
@@ -125,7 +134,8 @@ public class BookRequest {
     @Override
     public String toString() {
         return "BookRequest{" +
-                "name='" + name + '\'' +
+                "id=" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", image='" + image + '\'' +
                 ", publishedDate=" + publishedDate +
                 ", ageRestriction=" + ageRestriction +

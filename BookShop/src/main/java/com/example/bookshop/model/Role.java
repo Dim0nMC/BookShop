@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "roles")
 public class Role extends AbstractBaseEntity{
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "role")
     private List<User> users;
 
     @NotBlank

@@ -7,9 +7,11 @@ import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.repository.GenreRepository;
 import com.example.bookshop.dto.BookRequest;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.HashSet;
 import java.util.List;
@@ -85,6 +87,58 @@ public class BookService {
         newBook.setGenres(genreObjects);
 
         bookRepository.save(newBook);
+    }
+
+    @Transactional
+    public Book update(BookRequest bookRequest) {
+        Assert.notNull(bookRequest, "Book must not be null");
+        Assert.notNull(bookRequest.getId(), "Book id must not be null");
+
+        Book updatedBook = bookRepository.findById(bookRequest.getId()).orElse(null);
+
+        updatedBook.setName(bookRequest.getName());
+        updatedBook.setPublished_data(bookRequest.getPublishedDate());
+        updatedBook.setAge_restriction(bookRequest.getAgeRestriction());
+        updatedBook.setPage_count(bookRequest.getPageCount());
+        updatedBook.setDescription(bookRequest.getDescription());
+        updatedBook.setRaiting(bookRequest.getRaiting() != null ? bookRequest.getRaiting() : 0.0);
+        updatedBook.setRead_count(bookRequest.getReadCount() != null ? bookRequest.getReadCount() : 0);
+        updatedBook.setPurchased_count(bookRequest.getPurchasedCount() != null ? bookRequest.getPurchasedCount() : 0);
+
+        Set<Author> authorObjects = new HashSet<>(authorRepository.findAllById(bookRequest.getAuthors()));
+        Set<Genre> genreObjects = new HashSet<>(genreRepository.findAllById(bookRequest.getGenres()));
+
+        if (authorObjects.size() != bookRequest.getAuthors().size()) {
+            throw new IllegalArgumentException("Some authors not found.");
+        }
+
+        if (genreObjects.size() != bookRequest.getGenres().size()) {
+            throw new IllegalArgumentException("Some genres not found.");
+        }
+
+        System.out.println(authorObjects.toString());
+        updatedBook.setAuthors(authorObjects);
+        System.out.println(genreObjects.toString());
+        updatedBook.setGenres(genreObjects);
+
+        return bookRepository.save(updatedBook);
+    }
+
+    @Transactional
+    public void delete(int id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+
+        for (Author author : book.getAuthors()) {
+            author.getBooks().remove(book);
+            authorRepository.save(author);
+        }
+
+        for (Genre genre : book.getGenres()) {
+            genre.getBooks().remove(book);
+            genreRepository.save(genre);
+
+            bookRepository.delete(book);
+        }
     }
 
 }
