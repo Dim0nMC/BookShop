@@ -3,21 +3,31 @@ package com.example.bookshop.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 
 @Entity
-@Table(name = "Books")
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
+    @JoinTable(
+            name = "books_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
     private Set<Genre> genres;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
+    @JoinTable(
+            name = "books_authors",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
     private Set<Author> authors;
 
     @ManyToMany(mappedBy = "books")
@@ -32,8 +42,8 @@ public class Book {
 
     private String image;
 
-    @NotBlank
-    private Date published_data;
+    @NotNull
+    private LocalDate published_data;
 
     @NotNull
     @Min(value = 0)
@@ -60,7 +70,7 @@ public class Book {
 
     public Book() {}
 
-    public Book(Set<Genre> genres, Set<Author> authors, String name, Date published_data, int age_restriction, int page_count, double raiting, int read_count, int purchased_count) {
+    public Book(Set<Genre> genres, Set<Author> authors, String name, LocalDate published_data, int age_restriction, int page_count, double raiting, int read_count, int purchased_count) {
         this.genres = genres;
         this.authors = authors;
         this.name = name;
@@ -72,7 +82,7 @@ public class Book {
         this.purchased_count = 0;
     }
 
-    public Book(Set<Genre> genres, Set<Author> authors, Set<User> users, Set<OrderDetails> orderDetailsSet, String name, String image, Date published_data, int age_restriction, int page_count, String description, double raiting, int read_count, int purchased_count) {
+    public Book(Set<Genre> genres, Set<Author> authors, Set<User> users, Set<OrderDetails> orderDetailsSet, String name, String image, LocalDate published_data, int age_restriction, int page_count, String description, double raiting, int read_count, int purchased_count) {
         this.genres = genres;
         this.authors = authors;
         this.users = users;
@@ -83,9 +93,9 @@ public class Book {
         this.age_restriction = age_restriction;
         this.page_count = page_count;
         this.description = description;
-        this.raiting = 0;
-        this.read_count = 0;
-        this.purchased_count = 0;
+        this.raiting = raiting;
+        this.read_count = read_count;
+        this.purchased_count = purchased_count;
     }
 
     public long getId() {
@@ -144,11 +154,11 @@ public class Book {
         this.image = image;
     }
 
-    public Date getPublished_data() {
+    public LocalDate getPublished_data() {
         return published_data;
     }
 
-    public void setPublished_data(Date published_data) {
+    public void setPublished_data(LocalDate published_data) {
         this.published_data = published_data;
     }
 

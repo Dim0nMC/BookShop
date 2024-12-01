@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.beans.JavaBean;
 
 @Entity
+@Table (name = "order_details")
 public class OrderDetails {
     @EmbeddedId
     private OrderDetailsId id;

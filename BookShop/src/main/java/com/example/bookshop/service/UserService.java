@@ -18,19 +18,19 @@
             this.userRepository = userRepository;
         }
 
-        public User createUser(User user) {
+        public User create(User user) {
             return userRepository.save(user);
         }
 
-        public List<User> getAllUsers() {
+        public List<User> getAll() {
             return userRepository.findAll();
         }
 
-        public User getUserById(Long id) {
+        public User getById(Long id) {
             return userRepository.findById(id).orElse(null);
         }
 
-        public User updateUser(Long id, User userDetails) {
+        public User update(Long id, User userDetails) {
             User user = userRepository.findById(id).orElse(null);
             if(user != null) {
                 user.setName(userDetails.getName());
@@ -39,7 +39,7 @@
             return null;
         }
 
-        public void deleteUser(Long id) {
+        public void delete(Long id) {
             userRepository.deleteById(id);
         }
 

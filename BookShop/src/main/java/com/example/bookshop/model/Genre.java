@@ -1,5 +1,6 @@
 package com.example.bookshop.model;
 
+import ch.qos.logback.core.model.INamedModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,20 +8,17 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
-@Table(name = "Genres")
+@Table(name = "genres")
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
     @NotBlank
     @Size(max = 50)
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "Books_Genres",
-                joinColumns = @JoinColumn(name = "genre_id"),
-                inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ManyToMany(mappedBy = "genres")
     private Set<Book> books;
 
     public Genre() {}
@@ -30,11 +28,11 @@ public class Genre {
         this.books = books;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,5 +50,14 @@ public class Genre {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", books=" + books +
+                '}';
     }
 }

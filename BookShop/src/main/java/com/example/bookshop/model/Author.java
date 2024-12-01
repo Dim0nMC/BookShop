@@ -2,22 +2,20 @@ package com.example.bookshop.model;
 
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "Authors")
+@Table(name = "authors")
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
-    @ManyToMany
-    @JoinTable(name = "Books_Authors",
-                joinColumns = @JoinColumn(name = "author_id"),
-                inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ManyToMany(mappedBy = "authors")
     private Set<Book> books;
 
     @NotBlank
@@ -32,7 +30,7 @@ public class Author {
 
     public Author(){}
 
-    public Author(long id, String name, String surname) {
+    public Author(Integer id, String name, String surname) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -45,11 +43,11 @@ public class Author {
         this.about = about;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -83,5 +81,16 @@ public class Author {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", books=" + books +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", about='" + about + '\'' +
+                '}';
     }
 }

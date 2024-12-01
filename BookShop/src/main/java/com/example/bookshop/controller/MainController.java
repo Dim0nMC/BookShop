@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -24,7 +24,7 @@ public class MainController {
 //    @PostMapping("/submit-name")
 //    public String submitName(@RequestParam String name, Model model) {
 //        User user = new User(name);
-//        userService.createUser(user);
+//        userService.create(user);
 //        return "home";
 //    }
 }
