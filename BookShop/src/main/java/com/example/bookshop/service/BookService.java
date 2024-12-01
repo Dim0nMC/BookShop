@@ -41,6 +41,7 @@ public class BookService {
     @Transactional
     public void create(BookRequest bookRequest) {
         Book newBook = new Book();
+
         newBook.setName(bookRequest.getName());
         newBook.setPublished_data(bookRequest.getPublishedDate());
         newBook.setAge_restriction(bookRequest.getAgeRestriction());
@@ -50,7 +51,6 @@ public class BookService {
         newBook.setRead_count(bookRequest.getReadCount() != null ? bookRequest.getReadCount() : 0);
         newBook.setPurchased_count(bookRequest.getPurchasedCount() != null ? bookRequest.getPurchasedCount() : 0);
 
-        bookRepository.save(newBook);
 //        Set<Integer> authorsID = bookRequest.getAuthors();
 //        Set<Author> authorObjects = new HashSet<>();
 //        for(Integer authorID : authorsID) {
@@ -83,8 +83,6 @@ public class BookService {
         newBook.setAuthors(authorObjects);
         System.out.println(genreObjects.toString());
         newBook.setGenres(genreObjects);
-
-
 
         bookRepository.save(newBook);
     }
