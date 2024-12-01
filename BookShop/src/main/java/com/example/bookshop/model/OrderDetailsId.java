@@ -6,6 +6,6 @@ import java.io.Serializable;
 
 @Embeddable
 public class OrderDetailsId implements Serializable {
-    private long orderId;
-    private long bookId;
+    private Integer orderId;
+    private Integer bookId;
 }

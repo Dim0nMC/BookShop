@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "genres")
-public class Genre {
+public class Genre extends AbstractBaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

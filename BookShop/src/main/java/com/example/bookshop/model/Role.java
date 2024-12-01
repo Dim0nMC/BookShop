@@ -8,10 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class Role extends AbstractBaseEntity{
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users;
@@ -24,14 +21,6 @@ public class Role {
     public Role(List<User> users, String name) {
         this.users = users;
         this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public List<User> getUsers() {

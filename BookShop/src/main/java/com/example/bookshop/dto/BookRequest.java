@@ -1,7 +1,6 @@
-package com.example.bookshop.tdo;
+package com.example.bookshop.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDate;
 import java.util.Set;

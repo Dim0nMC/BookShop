@@ -13,10 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Order extends AbstractBaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false )
@@ -47,14 +44,6 @@ public class Order {
         this.payment_date = null;
         this.cost = cost;
         this.status = "В обработке";
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public User getUser_id() {

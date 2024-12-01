@@ -9,10 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "books")
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Book extends AbstractBaseEntity{
 
     @ManyToMany
     @JoinTable(
@@ -96,14 +93,6 @@ public class Book {
         this.raiting = raiting;
         this.read_count = read_count;
         this.purchased_count = purchased_count;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Set<Genre> getGenres() {

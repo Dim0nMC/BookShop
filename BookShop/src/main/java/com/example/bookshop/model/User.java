@@ -10,12 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-
+public class User extends AbstractBaseEntity{
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -64,14 +59,6 @@ public class User {
         this.password = password;
         this.phone = phone;
         this.age = age;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Role getRole() {

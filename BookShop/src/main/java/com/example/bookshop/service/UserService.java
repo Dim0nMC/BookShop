@@ -26,11 +26,11 @@
             return userRepository.findAll();
         }
 
-        public User getById(Long id) {
+        public User getById(Integer id) {
             return userRepository.findById(id).orElse(null);
         }
 
-        public User update(Long id, User userDetails) {
+        public User update(Integer id, User userDetails) {
             User user = userRepository.findById(id).orElse(null);
             if(user != null) {
                 user.setName(userDetails.getName());
@@ -39,7 +39,7 @@
             return null;
         }
 
-        public void delete(Long id) {
+        public void delete(Integer id) {
             userRepository.deleteById(id);
         }
 

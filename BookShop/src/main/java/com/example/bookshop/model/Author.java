@@ -10,10 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "authors")
-public class Author {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Author extends AbstractBaseEntity {
 
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books;
@@ -41,14 +38,6 @@ public class Author {
         this.name = name;
         this.surname = surname;
         this.about = about;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Set<Book> getBooks() {
