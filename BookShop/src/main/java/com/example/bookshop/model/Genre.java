@@ -52,12 +52,4 @@ public class Genre extends AbstractBaseEntity{
         this.books = books;
     }
 
-    @Override
-    public String toString() {
-        return "Genre{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", books=" + books +
-                '}';
-    }
 }

@@ -41,40 +41,6 @@ public class BookService {
     @Transactional
     public void create(BookRequest bookRequest) {
         Book newBook = new Book();
-
-        Set<Integer> authorsID = bookRequest.getAuthors();
-        Set<Author> authorObjects = new HashSet<>();
-        for(Integer authorID : authorsID) {
-            Author author = authorRepository.findById(authorID).orElse(null);
-            System.out.println(author.toString());
-            authorObjects.add(author);
-        }
-
-
-        Set<Integer> genresID = bookRequest.getGenres();
-        Set<Genre> genreObjects = new HashSet<>();
-        for(Integer genreID : genresID) {
-            Genre genre = genreRepository.findById(genreID).orElse(null);
-            System.out.println(genre.toString());
-            genreObjects.add(genre);
-        }
-
-//        Set<Author> authorObjects = new HashSet<>(authorRepository.findAllById(bookRequest.getAuthors()));
-//        Set<Genre> genreObjects = new HashSet<>(genreRepository.findAllById(bookRequest.getGenres()));
-//
-//        if (authorObjects.size() != bookRequest.getAuthors().size()) {
-//            throw new IllegalArgumentException("Some authors not found.");
-//        }
-//
-//        if (genreObjects.size() != bookRequest.getGenres().size()) {
-//            throw new IllegalArgumentException("Some genres not found.");
-//        }
-
-        System.out.println(authorObjects.toString());
-        newBook.setAuthors(authorObjects);
-        System.out.println(genreObjects.toString());
-        newBook.setGenres(genreObjects);
-
         newBook.setName(bookRequest.getName());
         newBook.setPublished_data(bookRequest.getPublishedDate());
         newBook.setAge_restriction(bookRequest.getAgeRestriction());
@@ -83,6 +49,42 @@ public class BookService {
         newBook.setRaiting(bookRequest.getRaiting() != null ? bookRequest.getRaiting() : 0.0);
         newBook.setRead_count(bookRequest.getReadCount() != null ? bookRequest.getReadCount() : 0);
         newBook.setPurchased_count(bookRequest.getPurchasedCount() != null ? bookRequest.getPurchasedCount() : 0);
+
+        bookRepository.save(newBook);
+//        Set<Integer> authorsID = bookRequest.getAuthors();
+//        Set<Author> authorObjects = new HashSet<>();
+//        for(Integer authorID : authorsID) {
+//            Author author = authorRepository.findById(authorID).orElse(null);
+//            System.out.println(author.toString());
+//            authorObjects.add(author);
+//        }
+//
+//
+//        Set<Integer> genresID = bookRequest.getGenres();
+//        Set<Genre> genreObjects = new HashSet<>();
+//        for(Integer genreID : genresID) {
+//            Genre genre = genreRepository.findById(genreID).orElse(null);
+//            System.out.println(genre.toString());
+//            genreObjects.add(genre);
+//        }
+
+        Set<Author> authorObjects = new HashSet<>(authorRepository.findAllById(bookRequest.getAuthors()));
+        Set<Genre> genreObjects = new HashSet<>(genreRepository.findAllById(bookRequest.getGenres()));
+
+        if (authorObjects.size() != bookRequest.getAuthors().size()) {
+            throw new IllegalArgumentException("Some authors not found.");
+        }
+
+        if (genreObjects.size() != bookRequest.getGenres().size()) {
+            throw new IllegalArgumentException("Some genres not found.");
+        }
+
+        System.out.println(authorObjects.toString());
+        newBook.setAuthors(authorObjects);
+        System.out.println(genreObjects.toString());
+        newBook.setGenres(genreObjects);
+
+
 
         bookRepository.save(newBook);
     }
