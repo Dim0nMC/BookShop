@@ -2,6 +2,8 @@ package com.example.bookshop.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -17,6 +19,7 @@ public class Book extends AbstractBaseEntity{
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Genre> genres;
 
     @ManyToMany
@@ -25,6 +28,7 @@ public class Book extends AbstractBaseEntity{
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Author> authors;
 
     @ManyToMany(mappedBy = "books")

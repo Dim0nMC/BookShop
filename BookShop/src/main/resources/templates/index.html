@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн Библиотека</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header>
+    <div class="container nav">
+        <div class="logo">📚 BookShop</div>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="/books">Каталог</a>
+            <a href="/about">О нас</a>
+            <a href="/contact">Контакты</a>
+            <a href="/login">Вход</a>
+        </nav>
+    </div>
+</header>
+
+<section class="banner">
+    <div class="container">
+        <h1>Добро пожаловать в онлайн-библиотеку!</h1>
+        <p>Читайте, открывайте новое, и заказывайте книги прямо сейчас</p>
+    </div>
+</section>
+
+<!-- Поисковая форма -->
+<section class="search-section">
+    <div class="container">
+        <form action="/search" method="GET">
+            <input type="text" name="query" placeholder="Поиск по названию или автору..."/>
+            <button type="submit">🔍 Найти</button>
+        </form>
+    </div>
+</section>
+
+<!-- Витрина популярных книг -->
+<section class="book-catalog">
+    <div class="container">
+        <h2>Популярные книги</h2>
+        <div class="book-grid">
+            <a th:href="@{'/book/' + ${book.id}}"
+               class="book-card"
+               th:each="book : ${books}">
+                <img th:src="${book.image}" alt="Book Cover">
+                <h3 th:text="${book.name}">Название книги</h3>
+                <p th:text="'Автор: ' + ${book.author}">Автор: Имя Автора</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Онлайн Библиотека. Все права защищены.</p>
+    </div>
+</footer>
+
+</body>
+</html>

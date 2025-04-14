@@ -20,9 +20,9 @@ import java.util.Set;
 @Service
 public class BookService {
 
-    BookRepository bookRepository;
-    AuthorRepository authorRepository;
-    GenreRepository genreRepository;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final GenreRepository genreRepository;
 
 
     @Autowired
@@ -32,12 +32,26 @@ public class BookService {
         this.genreRepository = genreRepository;
     }
 
-       public List<Book> getAll() {
+    public List<Book> getAll() {
         return bookRepository.findAll();
     }
 
     public Book getById(int id) {
         return bookRepository.findById(id).orElse(null);
+    }
+
+    private Book createFromDto(BookRequest bookRequest) {
+        Book book = new Book();
+        book.setName(bookRequest.getName());
+        book.setPublished_data(bookRequest.getPublishedDate());
+        book.setAge_restriction(bookRequest.getAgeRestriction());
+        book.setPage_count(bookRequest.getPageCount());
+        book.setDescription(bookRequest.getDescription());
+        book.setRaiting(bookRequest.getRaiting() != null ? bookRequest.getRaiting() : 0.0);
+        book.setRead_count(bookRequest.getReadCount() != null ? bookRequest.getReadCount() : 0);
+        book.setPurchased_count(bookRequest.getPurchasedCount() != null ? bookRequest.getPurchasedCount() : 0);
+
+        return book;
     }
 
     @Transactional
@@ -136,9 +150,9 @@ public class BookService {
         for (Genre genre : book.getGenres()) {
             genre.getBooks().remove(book);
             genreRepository.save(genre);
-
-            bookRepository.delete(book);
         }
+
+        bookRepository.delete(book);
     }
 
 }

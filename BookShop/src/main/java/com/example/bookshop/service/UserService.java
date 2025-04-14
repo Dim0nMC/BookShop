@@ -11,7 +11,8 @@
     @Service
     public class UserService {
 
-        UserRepository userRepository;
+
+        private UserRepository userRepository;
 
         @Autowired
         public UserService(UserRepository userRepository) {
@@ -25,6 +26,7 @@
         public List<User> getAll() {
             return userRepository.findAll();
         }
+
 
         public User getById(Integer id) {
             return userRepository.findById(id).orElse(null);

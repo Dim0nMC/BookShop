@@ -14,13 +14,13 @@ public class AdminBookRestController {
     @Autowired
     private BookService bookService;
 
-    @PostMapping("/add")
+    @PostMapping()
     @ResponseStatus(HttpStatus.OK)
-    public String addBook(@RequestBody BookRequest book) {
-//        System.out.println("Метод контроллера вызван");
+    public void create(@RequestBody BookRequest book) {
+        System.out.println("Метод контроллера вызван");
 //        System.out.println(book.toString());
+        //bookService.delete(3);
         bookService.create(book);
-        return "success";
     }
 
 

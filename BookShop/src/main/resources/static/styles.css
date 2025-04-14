@@ -1,0 +1,124 @@
+/* Общие стили остаются без изменений */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f7f7f7;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Стили для навигации и хедера */
+header {
+    background-color: #232323;
+    color: white;
+    padding: 1rem 0;
+}
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav a {
+    color: white;
+    margin-left: 1rem;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.nav a:hover {
+    text-decoration: underline;
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Баннер */
+.banner {
+    background: linear-gradient(to right, #4f93ce, #28527a);
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+}
+.banner h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Поисковая форма */
+.search-section {
+    background: white;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+.search-section form {
+    display: inline-block;
+}
+.search-section input {
+    padding: 0.5rem;
+    width: 60%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.search-section button {
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    background-color: #4f93ce;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Витрина популярных книг */
+.book-catalog {
+    padding: 2rem 0;
+    background: #fff;
+}
+.book-catalog h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Настройка грида для 4 карточек в ряду */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+/* Стиль карточки книги */
+.book-card {
+    display: block; /* Используем ссылку как контейнер */
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s;
+    text-decoration: none; /* Убираем подчёркивание у ссылки */
+    color: inherit;
+}
+.book-card:hover {
+    transform: scale(1.05);
+}
+.book-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+/* Футер */
+footer {
+    background-color: #232323;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+}
