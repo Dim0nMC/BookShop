@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book.name} + ' - Детали книги'">Детали книги</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <!-- Можно подключить ещё Google шрифты для красоты -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Если хочешь вставить часть CSS прямо в шаблон – можно */
+        .book-details-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            padding: 2rem;
+            font-family: 'Roboto', sans-serif;
+        }
+        .book-left, .book-right {
+            background: #fff;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        /* Левая колонка: фиксированная ширина для обложки */
+        .book-left {
+            flex: 1 1 300px;
+            max-width: 400px;
+            text-align: center;
+        }
+        .book-left img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .book-meta {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+        .book-meta span {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        /* Правая колонка: гибкий блок с остальными деталями */
+        .book-right {
+            flex: 2 1 500px;
+        }
+        .book-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .book-info {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        .book-info span {
+            display: inline-block;
+            margin-right: 1.5rem;
+            font-weight: 700;
+        }
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .book-extra {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .extra-item {
+            background: #f2f2f2;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .extra-item:hover {
+            background: #e0e0e0;
+        }
+        .label {
+            font-weight: 700;
+            margin-right: 0.3rem;
+        }
+        .detail-links a {
+            margin-right: 1rem;
+            text-decoration: none;
+            color: #4f93ce;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+        .detail-links a:hover {
+            color: #28527a;
+        }
+        /* При маленьких экранах колонки становятся вертикальными */
+        @media (max-width: 768px) {
+            .book-details-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container nav">
+        <div class="logo">
+            <a href="/" style="text-decoration: none; color: inherit;">📚 BookShop</a>
+        </div>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="/genres">Каталог</a>
+            <a href="/about">О нас</a>
+            <a href="/contact">Контакты</a>
+            <a href="/login">Вход</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container book-details-container">
+
+        <!-- Левая колонка -->
+        <div class="book-left">
+            <img th:src="@{'/' + ${book.image}}" alt="Обложка книги"/>
+            <div class="book-meta">
+                <span th:text="'Страницы: ' + ${book.page_count}">Страницы: 350</span>
+
+
+
+                <span class="age-badge" th:text="${book.age_restriction + '+'}">16+</span>
+            </div>
+
+            <form th:action="@{'/cart/add/' + ${book.id}}" method="post" style="width: 100%; margin-top: 1.5rem;">
+                <button type="submit" class="add-to-cart-btn">Добавить в корзину</button>
+            </form>
+
+        </div>
+
+        <!-- Правая колонка -->
+        <div class="book-right">
+            <h1 class="book-title" th:text="${book.name}">Название книги</h1>
+
+            <!-- Авторы -->
+            <div class="detail-links">
+                <span class="label">Авторы:</span>
+                <span th:each="author : ${book.authors}">
+                    <a th:href="@{'/search?query=' + ${author.name} + ' ' + ${author.surname}}"
+                       th:text="${author.name + ' ' + author.surname}">Автор</a>
+                </span>
+
+            <!-- Статистика -->
+                <div class="book-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-number" th:text="${book.raiting}">4.5</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">📖</div>
+                        <div class="stat-number" th:text="${book.read_count}">1200</div>
+                        <div class="stat-label">Прочитано</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">🛒</div>
+                        <div class="stat-number" th:text="${book.purchased_count}">300</div>
+                        <div class="stat-label">Куплено</div>
+                    </div>
+                </div>
+
+            <!-- Дата публикации -->
+            <div class="book-info" style="margin-top: 1.5rem;">
+                <span><strong>Дата публикации:</strong> <span th:text="${book.published_data.toString()}">2025-04-15</span></span>
+            </div>
+
+            <!-- Описание -->
+            <div class="book-section">
+                <h2 class="section-title">О книге</h2>
+                <div class="book-description" th:text="${book.description}">
+                    Здесь описание книги.
+                </div>
+            </div>
+
+            <!-- Жанры -->
+            <div class="book-section">
+                <h2 class="section-title">Жанры</h2>
+                <div class="detail-links">
+            <span th:each="genre : ${book.genres}">
+                <a th:href="@{'/search?query=' + ${genre.name}}" th:text="${genre.name}">Жанр</a>
+            </span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Онлайн Библиотека. Все права защищены.</p>
+    </div>
+</footer>
+
+</body>
+</html>

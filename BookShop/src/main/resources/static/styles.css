@@ -1,18 +1,19 @@
-/* Общие стили остаются без изменений */
+/* Подключаем красивый шрифт для всей страницы */
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background: #f7f7f7;
+    background: #cdedf4;
 }
 
+/* Контейнер для выравнивания содержимого */
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Стили для навигации и хедера */
+/* Стили для навигации и хедера остаются прежними */
 header {
     background-color: #232323;
     color: white;
@@ -51,7 +52,7 @@ header {
 
 /* Поисковая форма */
 .search-section {
-    background: white;
+    background: #cdedf4;
     padding: 1.5rem 0;
     text-align: center;
 }
@@ -62,26 +63,23 @@ header {
     gap: 0.5rem;
     flex-wrap: wrap;
 }
-
 .search-section input {
-    padding: 0.5rem;
+    padding: 0.7rem;
     width: 300px;
+    font-size: 1.1em;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 1rem;
 }
-
 .search-section button {
-    padding: 0.55rem 1.2rem;
+    padding: 0.8rem 1.5rem;
     background-color: #4f93ce;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 1.1em;
     cursor: pointer;
     transition: 0.2s;
 }
-
 .search-section button:hover {
     background-color: #3a7cb9;
 }
@@ -89,7 +87,7 @@ header {
 /* Витрина популярных книг */
 .book-catalog {
     padding: 2rem 0;
-    background: #fff;
+    background: #cdedf4;
 }
 .book-catalog h2 {
     text-align: center;
@@ -125,6 +123,42 @@ header {
     margin-bottom: 0.5rem;
 }
 
+/* Секция жанров */
+.genres-section {
+    padding: 2rem 0;
+    background: #cdedf4;
+}
+.genres-section h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Грид для жанров - ровно 4 карточки в ряд */
+.genres-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+/* Стиль карточки жанра */
+.genre-card {
+    font-family: 'Poetsen One', cursive;
+    display: block;
+    background: #f0f0f0;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.3s;
+    font-size: 1.3em;   /* увеличенный размер шрифта */
+    font-weight: bold;
+}
+.genre-card:hover {
+    background: #e0e0e0;
+}
+
 /* Футер */
 footer {
     background-color: #232323;
@@ -132,4 +166,137 @@ footer {
     text-align: center;
     padding: 1rem 0;
     margin-top: 2rem;
+}
+
+.poetsen-one-regular {
+    font-family: "Poetsen One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.book-meta {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center; /* Центрируем */
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.age-badge {
+    background-color: #eee;
+    color: #444;
+    border: 1px solid #ccc;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.book-cart-button {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.book-cart-button button {
+    background-color: #4f93ce;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+.book-cart-button button:hover {
+    background-color: #3a7db1;
+}
+
+.add-to-cart-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #45a049;
+}
+
+.book-authors {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.book-authors a {
+    color: #4f93ce;
+    text-decoration: none;
+    margin-right: 0.3rem;
+}
+
+.book-authors a:hover {
+    text-decoration: underline;
+}
+
+.book-stats {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    justify-content: flex-start;
+}
+
+.stat-item {
+    background: #f7f7f7;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    width: 90px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+}
+
+.stat-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.2rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #777;
+}
+
+
+.book-section {
+    margin-top: 2rem;
+}
+
+.section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: #333;
 }

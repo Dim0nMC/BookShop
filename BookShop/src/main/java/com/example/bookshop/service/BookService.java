@@ -41,9 +41,15 @@ public class BookService {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public List<Book> findByPart(String part) {
-        List<Book> books = bookRepository.findByNameContainingIgnoreCase(part);
-        books.addAll(bookRepository.findByAuthors_NameContainingIgnoreCaseOrAuthors_SurnameContainingIgnoreCase(part,part));
+    public List<Book> findByPart(String query) {
+        List<Book> books = new ArrayList<>();
+        String[] parts = query.split(" ");
+        for (String part : parts) {
+            books.addAll(bookRepository.findByNameContainingIgnoreCase(part));
+            books.addAll(bookRepository.findByAuthors_NameContainingIgnoreCaseOrAuthors_SurnameContainingIgnoreCase(part,part));
+            books.addAll(bookRepository.findByGenres_NameContainingIgnoreCase(part));
+        }
+
         return books;
     }
 

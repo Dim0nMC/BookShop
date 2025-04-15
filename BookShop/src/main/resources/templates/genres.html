@@ -2,14 +2,18 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Онлайн Библиотека</title>
+    <title>Каталог жанров - Онлайн Библиотека</title>
+    <!-- Подключаем Google Font Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
 
 <header>
     <div class="container nav">
-        <div class="logo">📚 BookShop</div>
+        <div class="logo">
+            <a href="/" style="text-decoration: none; color: inherit;">📚 BookShop</a>
+        </div>
         <nav>
             <a href="/">Главная</a>
             <a href="/genres">Каталог</a>
@@ -20,10 +24,11 @@
     </div>
 </header>
 
+<!-- Баннер для страницы Каталога -->
 <section class="banner">
     <div class="container">
-        <h1>Добро пожаловать в онлайн-библиотеку!</h1>
-        <p>Читайте, открывайте новое, и заказывайте книги прямо сейчас</p>
+        <h1>Каталог жанров</h1>
+        <p>Выберите интересующий жанр для просмотра книг</p>
     </div>
 </section>
 
@@ -37,18 +42,16 @@
     </div>
 </section>
 
-<!-- Витрина популярных книг -->
-<section class="book-catalog">
+<!-- Секция с перечнем жанров -->
+<section class="genres-section">
     <div class="container">
-        <h2>Популярные книги</h2>
-        <div class="book-grid">
-            <a th:href="@{'/book/' + ${book.id}}"
-               class="book-card"
-               th:each="book : ${books}">
-                <img th:src="@{${book.image}}" alt="Обложка">
-                <h3 th:text="${book.name}">Название книги</h3>
-                <p th:text="'Автор: ' + ${book.author}">Автор: Имя Автора</p>
-            </a>
+        <h2>Жанры</h2>
+        <div class="genres-grid">
+            <!-- Перебор списка жанров. Каждый жанр — кликабельная карточка -->
+            <a th:each="genre : ${genres}"
+               th:href="@{'/search?query=' + ${genre.name}}"
+               class="genre-card"
+               th:text="${genre.name}">Название жанра</a>
         </div>
     </div>
 </section>
