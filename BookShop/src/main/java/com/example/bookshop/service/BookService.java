@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +40,13 @@ public class BookService {
     public Book getById(int id) {
         return bookRepository.findById(id).orElse(null);
     }
+
+    public List<Book> findByPart(String part) {
+        List<Book> books = bookRepository.findByNameContainingIgnoreCase(part);
+        books.addAll(bookRepository.findByAuthors_NameContainingIgnoreCaseOrAuthors_SurnameContainingIgnoreCase(part,part));
+        return books;
+    }
+
 
     private Book createFromDto(BookRequest bookRequest) {
         Book book = new Book();

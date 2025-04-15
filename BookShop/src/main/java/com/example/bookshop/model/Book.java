@@ -1,17 +1,19 @@
 package com.example.bookshop.model;
 
+import com.example.bookshop.dto.BookDisplay;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
 
 @Entity
 @Table(name = "books")
-public class Book extends AbstractBaseEntity{
+public class Book extends AbstractBaseEntity {
 
     @ManyToMany
     @JoinTable(

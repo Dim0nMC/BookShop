@@ -1,34 +1,59 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Результаты поиска</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
-<header>
-    <h1>Результаты поиска</h1>
-</header>
-<main>
-    <div id="bookGrid" class="book-grid"></div>
-</main>
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get('query');
-    fetch(`/api/search?query=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(books => renderBooks(books));
 
-    function renderBooks(books) {
-        const grid = document.getElementById("bookGrid");
-        grid.innerHTML = books.map(book => `
-        <div class="book" onclick="location.href='/book.html?id=${book.id}'">
-          <img src="${book.cover}" alt="${book.title}" />
-          <h3>${book.title}</h3>
-          <p>${book.author}</p>
+<header>
+    <div class="container nav">
+        <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">📚 BookShop</a></div>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="#">Каталог</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+            <a href="/login">Вход</a>
+        </nav>
+    </div>
+</header>
+
+<section class="search-section">
+    <div class="container">
+        <form action="/search" method="get" style="display: flex; gap: 10px;">
+            <input type="text" name="query" th:value="${query}" placeholder="Поиск по названию или автору..."/>
+            <button type="submit">🔍 Найти</button>
+        </form>
+    </div>
+</section>
+
+<section class="search-results">
+    <div class="container">
+        <h2 th:text="'Результаты по запросу: ' + ${query}">Результаты поиска</h2>
+
+        <div class="book-grid">
+            <div class="book-card" th:each="book : ${books}">
+                <a th:href="@{'/book/' + ${book.id}}">
+                    <img th:src="@{${book.image}}" alt="Обложка книги">
+                    <h3 th:text="${book.name}">Название книги</h3>
+                    <p th:text="'Автор: ' + ${book.author}">Автор: Имя Автора</p>
+                </a>
+            </div>
         </div>
-      `).join('');
-    }
-</script>
+
+        <div th:if="${#lists.isEmpty(books)}">
+            <p>Книги не найдены.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Онлайн Библиотека. Все права защищены.</p>
+    </div>
+</footer>
+
 </body>
 </html>

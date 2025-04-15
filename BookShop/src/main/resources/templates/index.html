@@ -45,7 +45,7 @@
             <a th:href="@{'/book/' + ${book.id}}"
                class="book-card"
                th:each="book : ${books}">
-                <img th:src="${book.image}" alt="Book Cover">
+                <img th:src="@{${book.image}}" alt="Обложка">
                 <h3 th:text="${book.name}">Название книги</h3>
                 <p th:text="'Автор: ' + ${book.author}">Автор: Имя Автора</p>
             </a>

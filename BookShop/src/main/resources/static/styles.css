@@ -56,23 +56,34 @@ header {
     text-align: center;
 }
 .search-section form {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
+
 .search-section input {
     padding: 0.5rem;
-    width: 60%;
-    max-width: 400px;
+    width: 300px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1rem;
 }
+
 .search-section button {
-    padding: 0.5rem 1rem;
-    margin-left: 0.5rem;
+    padding: 0.55rem 1.2rem;
     background-color: #4f93ce;
     color: white;
     border: none;
     border-radius: 5px;
+    font-size: 1rem;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.search-section button:hover {
+    background-color: #3a7cb9;
 }
 
 /* Витрина популярных книг */

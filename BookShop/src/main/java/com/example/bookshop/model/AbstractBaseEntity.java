@@ -3,6 +3,7 @@ package com.example.bookshop.model;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.StringJoiner;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity {
+public abstract class AbstractBaseEntity implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

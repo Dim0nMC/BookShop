@@ -50,4 +50,14 @@ public class BookResponse {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "BookResponse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
