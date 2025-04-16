@@ -68,4 +68,15 @@ public class ShowPageController {
         return "book-details";
     }
 
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login"; // login.html в templates
+    }
+
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register"; // login.html в templates
+    }
+
+
 }
