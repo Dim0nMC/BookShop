@@ -1,6 +1,5 @@
 package com.example.bookshop.config;
 
-import com.example.bookshop.service.CustomUserDetailsService;
 import com.example.bookshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
+    private final UserService userDetailsService;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(UserService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -45,17 +44,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // отключаем CSRF (можно оставить, если ты защищаешь формы)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/search", "/book/{id}",  "/register", "/login", "/styles.css", "/images/**", "/uploads/**").permitAll() // общедоступные ресурсы
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // доступ только для админов
-                        .anyRequest().authenticated() // все остальные требуют авторизации
+                        .requestMatchers("/", "/search", "/book/{id}", "/register", "/login", "/test-auth", "/styles.css", "/images/**", "/uploads/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/login") // своя кастомная страница логина
-                        .loginProcessingUrl("/perform_login") // форма будет отправляться сюда
-                        .defaultSuccessUrl("/", true) // куда перенаправлять после успешного входа
-                        .failureUrl("/genres") // при ошибке логина
+                        .loginPage("/login")
+                        .loginProcessingUrl("/perform_login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/genres")
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -64,9 +63,11 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
-                );
+                )
+                .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.bookshop.util;
 
+import com.example.bookshop.model.Role;
 import com.example.bookshop.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 public class CustomUserDetails implements UserDetails {
     private final User user;
@@ -21,6 +23,10 @@ public class CustomUserDetails implements UserDetails {
         return Collections.singletonList(
                 new SimpleGrantedAuthority("ROLE_" + user.getRole().getName())
         );
+    }
+
+    public int getId() {
+        return user.getId();
     }
 
     @Override

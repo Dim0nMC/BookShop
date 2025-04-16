@@ -1,0 +1,26 @@
+<!-- templates/fragments/header.html -->
+
+
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     th:fragment="header">
+
+    <div class="container nav">
+        <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">📚 BookShop</a></div>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="/genres">Каталог</a>
+            <a href="/about">О нас</a>
+            <a href="/contact">Контакты</a>
+
+            <span sec:authorize="isAuthenticated()">
+                <a href="/profile">👤 Кабинет</a>
+            </span>
+
+            <span sec:authorize="!isAuthenticated()">
+                <a href="/login">Войти</a>
+            </span>
+
+        </nav>
+    </div>
+</div>
