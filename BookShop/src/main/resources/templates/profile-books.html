@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваши книги</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body style="background-color: #d5f4fa; margin: 0; font-family: sans-serif;">
+
+<header th:insert="fragments/header :: header"></header>
+
+<section class="profile-wrapper">
+
+    <!-- Левая панель (не меняется) -->
+    <div class="sidebar"
+         style="background-color: white; border-radius: 24px; padding: 28px; text-align: center; width: 270px;">
+        <img th:src="@{'/' + ${user.image}}" style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); max-width: 100%; height: auto; border-radius: 24px;" alt="Аватар"/>
+        <div class="nav-buttons" style="display: flex; flex-direction: column; gap: 14px; margin-top: 30px;">
+            <a href="/profile/main" class="nav-button">Главная</a>
+            <a href="/profile/books" class="nav-button-chosen">Книги</a>
+            <a href="/profile/orders" class="nav-button">Заказы</a>
+            <a href="/profile/security" class="nav-button">Безопасность</a>
+        </div>
+    </div>
+
+    <!-- Правая панель с книгами -->
+    <div class="profile-card books-panel">
+        <div class="books-grid">
+            <div class="book-card" th:each="book : ${user.books}">
+                <a th:href="@{'/book/' + ${book.id}}" class="book-link">
+                    <img th:src="@{'/' + ${book.image}}" alt="Обложка книги" class="book-cover"/>
+                    <p class="book-title" th:text="${book.name}"  style="margin-bottom: 0px; margin-top: 0px;">Название книги</p>
+                    <div class="download-button">
+                        <a th:href="@{'/book/download/' + ${book.id}}">Скачать</a>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Онлайн Библиотека. Все права защищены.</p>
+    </div>
+</footer>
+
+</body>
+</html>

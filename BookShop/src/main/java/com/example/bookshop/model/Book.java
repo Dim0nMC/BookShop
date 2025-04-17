@@ -43,6 +43,8 @@ public class Book extends AbstractBaseEntity {
     @Size(min = 1, max = 255)
     private String name;
 
+
+
     private String image;
 
     @NotNull

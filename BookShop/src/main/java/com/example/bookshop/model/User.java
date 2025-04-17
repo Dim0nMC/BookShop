@@ -22,11 +22,19 @@ public class User extends AbstractBaseEntity{
     @JoinTable(name = "cart",
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private Set<Book> cart;
+
+    @ManyToMany
+    @JoinTable(name = "books_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Set<Book> books;
 
     @NotBlank
     @Size(min = 5, max = 20)
     private String name;
+
+    private String image;
 
     @Email
     @NotBlank
@@ -50,11 +58,13 @@ public class User extends AbstractBaseEntity{
 
     public User() {}
 
-    public User(Role role, List<Order> orders, Set<Book> books, String name, String email, String password, String phone, int age) {
+    public User(Role role, List<Order> orders, Set<Book> cart, Set<Book> books, String name, String image, String email, String password, String phone, int age) {
         this.role = role;
         this.orders = orders;
+        this.cart = cart;
         this.books = books;
         this.name = name;
+        this.image = image;
         this.email = email;
         this.password = password;
         this.phone = phone;
@@ -77,6 +87,14 @@ public class User extends AbstractBaseEntity{
         this.orders = orders;
     }
 
+    public Set<Book> getCart() {
+        return cart;
+    }
+
+    public void setCart(Set<Book> cart) {
+        this.cart = cart;
+    }
+
     public Set<Book> getBooks() {
         return books;
     }
@@ -91,6 +109,14 @@ public class User extends AbstractBaseEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getEmail() {

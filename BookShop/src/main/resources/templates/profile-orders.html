@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body style="background-color: #d5f4fa; margin: 0; font-family: sans-serif;">
+
+<header th:insert="fragments/header :: header"></header>
+
+<section class="profile-wrapper">
+
+    <!-- Левая панель -->
+    <div class="sidebar"
+         style="background-color: white; border-radius: 24px; padding: 28px; text-align: center; width: 270px;">
+        <img th:src="@{'/' + ${user.image}}" style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); max-width: 100%; height: auto; border-radius: 24px; " alt="Ававтар"/>
+        <div class="nav-buttons" style="display: flex; flex-direction: column; gap: 14px; margin-top: 30px;">
+            <a href="/profile/main" class="nav-button" >Главная</a>
+            <a href="/profile/books" class="nav-button">Книги</a>
+            <a href="/profile/orders" class="nav-button-chosen">Заказы</a>
+            <a href="/profile/security" class="nav-button">Безопасность</a>
+        </div>
+    </div>
+
+    <!-- Правая панель -->
+    <div class="profile-card">
+        <div>
+            <p style="margin-top: 0px; color: #888;">Имя пользователя:</p>
+            <p th:text="${user.name}">Dim0nMC</p>
+        </div>
+        <div>
+            <p style="color: #888;">Почта:</p>
+            <p th:text="${user.email}">email@example.com</p>
+        </div>
+        <div>
+            <p style="color: #888;">Телефон:</p>
+            <p th:text="${user.phone}">+7 (000) 000-00-00</p>
+        </div>
+        <div>
+            <p style="color: #888; ">Возраст:</p>
+            <p style="margin-bottom: 80px;"> <span th:text="${user.age}">21</span></p>
+        </div>
+
+        <a href="/profile/edit" class="edit-button">Изменить</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Онлайн Библиотека. Все права защищены.</p>
+    </div>
+</footer>
+
+</body>
+
+</html>

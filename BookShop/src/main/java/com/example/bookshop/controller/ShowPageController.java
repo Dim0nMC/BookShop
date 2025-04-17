@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ShowPageController {
@@ -84,12 +85,46 @@ public class ShowPageController {
         return "register"; // login.html в templates
     }
 
-    @GetMapping("/profile")
-    public String getProfile(Model model, Authentication authentication) {
+    @GetMapping("/profile/main")
+    public String getProfileMain(Model model, Authentication authentication) {
         String username = authentication.getName();  // Получаем имя текущего пользователя
         User user = userService.getByEmail(username);
-        model.addAttribute("user", user);  // Передаем данные пользователя в модель
-        return "profile";  // Вернем представление страницы профиля
+        model.addAttribute("user", user);
+        System.out.println(user.getImage());// Передаем данные пользователя в модель
+        return "profile-main";  // Вернем представление страницы профиля
+    }
+
+    @GetMapping("/profile/books")
+    public String getProfileBooks(Model model, Authentication authentication) {
+        String username = authentication.getName();  // Получаем имя текущего пользователя
+        User user = userService.getByEmail(username);
+
+        user.getBooks().forEach(System.out::println);
+
+        Set<Book> books = user.getBooks();
+
+        model.addAttribute("user", user);
+        model.addAttribute("books", user.getBooks());
+        System.out.println(user.getImage());// Передаем данные пользователя в модель
+        return "profile-books";  // Вернем представление страницы профиля
+    }
+
+    @GetMapping("/profile/orders")
+    public String getProfileOrders(Model model, Authentication authentication) {
+        String username = authentication.getName();  // Получаем имя текущего пользователя
+        User user = userService.getByEmail(username);
+        model.addAttribute("user", user);
+        System.out.println(user.getImage());// Передаем данные пользователя в модель
+        return "profile-orders";  // Вернем представление страницы профиля
+    }
+
+    @GetMapping("/profile/security")
+    public String getProfileSecurity(Model model, Authentication authentication) {
+        String username = authentication.getName();  // Получаем имя текущего пользователя
+        User user = userService.getByEmail(username);
+        model.addAttribute("user", user);
+        System.out.println(user.getImage());// Передаем данные пользователя в модель
+        return "profile-security";  // Вернем представление страницы профиля
     }
 
 

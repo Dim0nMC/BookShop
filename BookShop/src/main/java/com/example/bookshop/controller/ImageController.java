@@ -20,8 +20,8 @@ public class ImageController {
     @ResponseBody
     public ResponseEntity<Resource> serveImage(@PathVariable String filename) throws IOException {
         Path uploadPath = Paths.get("BookShop", "uploads").resolve(filename);
-//        System.out.println("Абсолютный путь: " + uploadPath.toAbsolutePath());
-//        System.out.println("Working dir: " + System.getProperty("user.dir"));
+        System.out.println("Абсолютный путь: " + uploadPath.toAbsolutePath());
+        System.out.println("Working dir: " + System.getProperty("user.dir"));
         Resource file = new UrlResource(uploadPath.toUri());
         if (file.exists() && file.isReadable()) {
             return ResponseEntity.ok()

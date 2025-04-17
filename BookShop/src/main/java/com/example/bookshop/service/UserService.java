@@ -8,6 +8,7 @@
     import org.springframework.security.core.userdetails.UserDetails;
     import org.springframework.security.core.userdetails.UserDetailsService;
     import org.springframework.security.core.userdetails.UsernameNotFoundException;
+    import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
 
     import java.util.List;
@@ -17,10 +18,12 @@
 
 
         private UserRepository userRepository;
+        private PasswordEncoder passwordEncoder;
 
         @Autowired
-        public UserService(UserRepository userRepository) {
+        public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
             this.userRepository = userRepository;
+            this.passwordEncoder = passwordEncoder;
         }
 
         public User create(User user) {
@@ -46,6 +49,19 @@
                 return userRepository.save(user);
             }
             return null;
+        }
+
+        public boolean changePassword(String username, String oldPassword, String newPassword) {
+            User user = userRepository.findByEmail(username).orElse(null);
+            if (user == null) return false;
+
+            if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+                return false;
+            }
+
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
         }
 
         public void delete(Integer id) {

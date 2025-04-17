@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Безопасность</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body style="background-color: #d5f4fa; margin: 0; font-family: sans-serif;">
+
+<header th:insert="fragments/header :: header"></header>
+
+<section class="profile-wrapper">
+
+    <!-- Левая панель -->
+    <div class="sidebar"
+         style="background-color: white; border-radius: 24px; padding: 28px; text-align: center; width: 270px;">
+        <img th:src="@{'/' + ${user.image}}"
+             style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); max-width: 100%; height: auto; border-radius: 24px;"
+             alt="Аватар"/>
+        <div class="nav-buttons" style="display: flex; flex-direction: column; gap: 14px; margin-top: 30px;">
+            <a href="/profile/main" class="nav-button">Главная</a>
+            <a href="/profile/books" class="nav-button">Книги</a>
+            <a href="/profile/orders" class="nav-button">Заказы</a>
+            <a href="/profile/security" class="nav-button-chosen">Безопасность</a>
+        </div>
+    </div>
+
+    <!-- Правая панель -->
+    <div class="profile-card" style=" padding: 40px;">
+        <h2 style="margin-top: 0;">Изменение пароля</h2>
+
+        <form id="changePasswordForm"
+              style="display: flex; flex-direction: column; gap: 16px; max-width: 400px;">
+            <input type="password" id="oldPassword" placeholder="Старый пароль" required
+                   style="padding: 10px; border-radius: 12px; border: 1px solid #ccc;">
+            <input type="password" id="newPassword" placeholder="Новый пароль" required
+                   style="padding: 10px; border-radius: 12px; border: 1px solid #ccc;">
+            <input type="password" id="confirmPassword" placeholder="Подтверждение пароля" required
+                   style="padding: 10px; border-radius: 12px; border: 1px solid #ccc;">
+            <button type="submit" class="nav-button" >Сменить пароль</button>
+
+
+
+            <p id="errorMsg" class="alert error-alert" style="display: none;"></p>
+            <p id="successMsg" class="alert success-alert" style="display: none;"></p>
+
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-button" style="margin-top: 230px; width: 300px" >Выйти из аккаунта</button>
+        </form>
+
+
+
+
+    </div>
+
+
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Онлайн Библиотека. Все права защищены.</p>
+    </div>
+</footer>
+
+<script>
+    const form = document.getElementById('changePasswordForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.textContent = '';
+        successMsg.textContent = '';
+
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        const response = await fetch('/profile/security/change-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ oldPassword, newPassword, confirmPassword })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            showErrorMessage(result.error);
+        } else {
+            showSuccessMessage("Пароль успешно изменён!");
+            form.reset();
+        }
+    });
+</script>
+
+<script>
+    function showSuccessMessage(message) {
+        const successMsg = document.getElementById("successMsg");
+        successMsg.textContent = message;
+        successMsg.style.display = "block";
+
+        // скрыть через 5 секунд
+        setTimeout(() => {
+            successMsg.style.display = "none";
+        }, 5000);
+    }
+
+    function showErrorMessage(message) {
+        const errorMsg = document.getElementById("errorMsg");
+        errorMsg.textContent = message;
+        errorMsg.style.display = "block";
+
+        // скрыть через 5 секунд
+        setTimeout(() => {
+            errorMsg.style.display = "none";
+        }, 5000);
+    }
+</script>
+
+</body>
+</html>
