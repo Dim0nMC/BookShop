@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="${book.name} + ' - Детали книги'">Детали книги</title>
@@ -100,20 +101,7 @@
 </head>
 <body>
 
-<header>
-    <div class="container nav">
-        <div class="logo">
-            <a href="/" style="text-decoration: none; color: inherit;">📚 BookShop</a>
-        </div>
-        <nav>
-            <a href="/">Главная</a>
-            <a href="/genres">Каталог</a>
-            <a href="/about">О нас</a>
-            <a href="/contact">Контакты</a>
-            <a href="/login">Вход</a>
-        </nav>
-    </div>
-</header>
+<header th:include="fragments/header :: header"></header>
 
 <main>
     <div class="container book-details-container">
