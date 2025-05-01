@@ -4,48 +4,93 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Профиль пользователя</title>
+    <title>Заказы</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body style="background-color: #d5f4fa; margin: 0; font-family: sans-serif;">
 
 <header th:insert="fragments/header :: header"></header>
 
-<section class="profile-wrapper">
+<section class="profile-wrapper" style="display: flex; gap: 32px; align-items: flex-start;">
+
 
     <!-- Левая панель -->
     <div class="sidebar"
          style="background-color: white; border-radius: 24px; padding: 28px; text-align: center; width: 270px;">
-        <img th:src="@{'/' + ${user.image}}" style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); max-width: 100%; height: auto; border-radius: 24px; " alt="Ававтар"/>
+        <img th:src="@{'/' + ${user.image}}" alt="Аватар"
+             style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); max-width: 100%; height: auto; border-radius: 24px;">
         <div class="nav-buttons" style="display: flex; flex-direction: column; gap: 14px; margin-top: 30px;">
-            <a href="/profile/main" class="nav-button" >Главная</a>
+            <a href="/profile/main" class="nav-button">Главная</a>
             <a href="/profile/books" class="nav-button">Книги</a>
             <a href="/profile/orders" class="nav-button-chosen">Заказы</a>
             <a href="/profile/security" class="nav-button">Безопасность</a>
         </div>
     </div>
 
+
     <!-- Правая панель -->
-    <div class="profile-card">
-        <div>
-            <p style="margin-top: 0px; color: #888;">Имя пользователя:</p>
-            <p th:text="${user.name}">Dim0nMC</p>
+    <div class="profile-card" style="flex: 1; display: flex; flex-direction: column; gap: 24px;">
+        <h2 style="margin-top: 0;">Мои заказы</h2>
+
+        <!-- Неоплаченные -->
+        <h3>Активные заказы</h3>
+        <div th:if="${#lists.isEmpty(activeOrders)}">
+            <p style="margin: 0;">У вас нет активных заказов.</p>
         </div>
-        <div>
-            <p style="color: #888;">Почта:</p>
-            <p th:text="${user.email}">email@example.com</p>
-        </div>
-        <div>
-            <p style="color: #888;">Телефон:</p>
-            <p th:text="${user.phone}">+7 (000) 000-00-00</p>
-        </div>
-        <div>
-            <p style="color: #888; ">Возраст:</p>
-            <p style="margin-bottom: 80px;"> <span th:text="${user.age}">21</span></p>
+        <div th:each="order : ${activeOrders}" style="background-color: white; border-radius: 24px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="margin: 0;"><strong>Дата заказа:</strong> <span th:text="${order.date}">01.01.2025</span></p>
+                    <p style="margin: 4px 0 0;"><strong>Статус:</strong> <span th:text="${order.status}">В обработке</span></p>
+                    <p style="margin: 4px 0 0;"><strong>Сумма:</strong> <span th:text="${order.cost + ' ₽'}">1500 ₽</span></p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <form th:action="@{'/profile/orders/pay/' + ${order.id}}" method="post">
+                        <button type="submit" class="nav-button">Оплатить</button>
+                    </form>
+                    <form th:action="@{'/profile/orders/delete/' + ${order.id}}" method="post">
+                        <button type="submit" class="nav-button">Удалить</button>
+                    </form>
+                </div>
+            </div>
+
+            <hr style="margin: 16px 0; border: none; border-top: 1px solid #eee;">
+
+            <div th:each="detail : ${order.orderDetailsSet}" style="display: flex; align-items: center; margin-bottom: 10px;">
+                <img th:src="@{'/' + ${detail.book.image}}" alt="Обложка"
+                     style="width: 60px; height: 80px; object-fit: cover; border-radius: 12px; margin-right: 20px;">
+                <div>
+                    <p style="margin: 0; font-weight: bold;" th:text="${detail.book.name}">Название книги</p>
+                </div>
+            </div>
         </div>
 
-        <a href="/profile/edit" class="edit-button">Изменить</a>
+        <!-- Оплаченные -->
+        <h3 style="margin-top: 40px;">Завершённые заказы</h3>
+        <div th:if="${#lists.isEmpty(completedOrders)}">
+            <p style="margin: 0;">Завершённых заказов пока нет.</p>
+        </div>
+        <div th:each="order : ${completedOrders}" style="background-color: white; border-radius: 24px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="margin: 0;"><strong>Дата заказа:</strong> <span th:text="${order.date}">01.01.2025</span></p>
+                    <p style="margin: 4px 0 0;"><strong>Статус:</strong> <span th:text="${order.status}">Оплачен</span></p>
+                    <p style="margin: 4px 0 0;"><strong>Сумма:</strong> <span th:text="${order.cost + ' ₽'}">1500 ₽</span></p>
+                </div>
+            </div>
+
+            <hr style="margin: 16px 0; border: none; border-top: 1px solid #eee;">
+
+            <div th:each="detail : ${order.orderDetailsSet}" style="display: flex; align-items: center; margin-bottom: 10px;">
+                <img th:src="@{'/' + ${detail.book.image}}" alt="Обложка"
+                     style="width: 60px; height: 80px; object-fit: cover; border-radius: 12px; margin-right: 20px;">
+                <div>
+                    <p style="margin: 0; font-weight: bold;" th:text="${detail.book.name}">Название книги</p>
+                </div>
+            </div>
+        </div>
     </div>
+
 </section>
 
 <footer>
@@ -55,5 +100,4 @@
 </footer>
 
 </body>
-
 </html>

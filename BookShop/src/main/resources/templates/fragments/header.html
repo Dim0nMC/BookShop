@@ -14,13 +14,12 @@
             <a href="/contact">Контакты</a>
 
             <span sec:authorize="isAuthenticated()">
-                <a href="/profile/main">👤 Кабинет</a>
-            </span>
-
-            <span sec:authorize="isAuthenticated()">
                 <a href="/profile/cart">🛒 Корзина</a>
             </span>
 
+            <span sec:authorize="isAuthenticated()">
+                <a href="/profile/main">👤 Кабинет</a>
+            </span>
 
             <span sec:authorize="!isAuthenticated()">
                 <a href="/login">Войти</a>

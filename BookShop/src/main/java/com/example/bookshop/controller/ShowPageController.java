@@ -4,13 +4,13 @@ import com.example.bookshop.dto.BookResponse;
 import com.example.bookshop.model.Book;
 import com.example.bookshop.model.Genre;
 import com.example.bookshop.model.User;
-import com.example.bookshop.service.BookService;
-import com.example.bookshop.service.CartService;
-import com.example.bookshop.service.GenreService;
-import com.example.bookshop.service.UserService;
+import com.example.bookshop.model.Order;
+import com.example.bookshop.service.*;
 import com.example.bookshop.util.BookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class ShowPageController {
@@ -29,13 +30,15 @@ public class ShowPageController {
     private final GenreService genreService;
     private final UserService userService;
     private final CartService cartService;
+    private final OrderService orderService;
 
     @Autowired
-    public ShowPageController(BookService bookService, GenreService genreService, UserService userService, CartService cartService) {
+    public ShowPageController(BookService bookService, GenreService genreService, UserService userService, CartService cartService, OrderService orderService) {
         this.bookService = bookService;
         this.genreService = genreService;
         this.userService = userService;
         this.cartService = new CartService();
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
@@ -118,13 +121,26 @@ public class ShowPageController {
     }
 
     @GetMapping("/profile/orders")
-    public String getProfileOrders(Model model, Authentication authentication) {
+    public String getUserOrders(@AuthenticationPrincipal UserDetails userDetails, Authentication authentication, Model model) {
         String username = authentication.getName();  // Получаем имя текущего пользователя
         User user = userService.getByEmail(username);
         model.addAttribute("user", user);
-        System.out.println(user.getImage());// Передаем данные пользователя в модель
-        return "profile-orders";  // Вернем представление страницы профиля
+
+        List<Order> allOrders = orderService.getOrdersByUser(user);
+        List<Order> activeOrders = allOrders.stream()
+                .filter(o -> !"Оплачен".equalsIgnoreCase(o.getStatus()))
+                .collect(Collectors.toList());
+
+        List<Order> completedOrders = allOrders.stream()
+                .filter(o -> "Оплачен".equalsIgnoreCase(o.getStatus()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("activeOrders", activeOrders);
+        model.addAttribute("completedOrders", completedOrders);
+
+        return "profile-orders";
     }
+
 
     @GetMapping("/profile/security")
     public String getProfileSecurity(Model model, Authentication authentication) {

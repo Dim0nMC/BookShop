@@ -14,8 +14,13 @@
     <!-- Левая колонка: список книг в корзине -->
     <div style="flex: 3; display: flex; flex-direction: column; gap: 16px;">
 
+        <!-- Если корзина пуста -->
+        <div th:if="${#lists.isEmpty(cart)}"
+             style="text-align: center; font-size: 1.2em; color: #555; padding: 40px; background-color: white; border-radius: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            Корзина пуста
+        </div>
 
-
+        <!-- Если корзина не пуста -->
         <div th:each="item : ${cart}"
              style="background-color: white; border-radius: 24px; padding: 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
 
@@ -39,8 +44,10 @@
         </div>
     </div>
 
-    <!-- Правая панель: оформление -->
-    <div class="profile-card" style="flex: 1; width: 270px; height: fit-content; display: flex; flex-direction: column; justify-content: space-between;">
+
+    <!-- Правая панель: оформление (только если корзина не пуста) -->
+    <div class="profile-card" th:if="${!#lists.isEmpty(cart)}"
+         style="flex: 1; width: 270px; height: fit-content; display: flex; flex-direction: column; justify-content: space-between;">
         <h3>Итого</h3>
         <p style="font-size: 1.2em; font-weight: bold;" th:text="${totalPrice + ' ₽'}">0 ₽</p>
 
@@ -48,6 +55,7 @@
             <button type="submit" class="nav-button" style="margin-top: 20px;">Оформить заказ</button>
         </form>
     </div>
+
 
 </section>
 

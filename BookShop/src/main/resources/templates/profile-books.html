@@ -9,7 +9,7 @@
 
 <header th:insert="fragments/header :: header"></header>
 
-<section class="profile-wrapper">
+<section class="profile-wrapper" style="display: flex; gap: 32px; align-items: flex-start;">
 
     <!-- Левая панель (не меняется) -->
     <div class="sidebar"
@@ -25,6 +25,7 @@
 
     <!-- Правая панель с книгами -->
     <div class="profile-card books-panel">
+        <h2 style="margin-top: 0;">Мои книги</h2>
         <div class="books-grid">
             <div class="book-card" th:each="book : ${user.books}">
                 <a th:href="@{'/book/' + ${book.id}}" class="book-link">

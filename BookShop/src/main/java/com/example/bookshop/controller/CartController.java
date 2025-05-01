@@ -33,7 +33,7 @@ public class CartController {
         User user = userService.getByEmail(username);
         user.getCart().add(bookService.getById(id));
         userService.addToCart(user);
-        return "redirect:/book/"+id;
+        return "redirect:/profile/cart";
     }
 
     @GetMapping("/cart/remove/{id}")
@@ -53,7 +53,7 @@ public class CartController {
         user.getOrders().add(order);
         user.getCart().clear();
         userService.update(user.getId(),user);
-        return "redirect:/profile/cart";
+        return "redirect:/profile/orders";
     }
 
 }
