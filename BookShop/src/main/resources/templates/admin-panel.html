@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/admin-header :: adminHeader"></div>
+
+</body>
+</html>

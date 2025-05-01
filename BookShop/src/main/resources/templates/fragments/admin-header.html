@@ -1,0 +1,87 @@
+<!-- templates/fragments/admin-header.html -->
+<div th:fragment="adminHeader">
+    <!-- Вставь сюда полностью HTML с навигацией и <script> как в твоём примере -->
+    <!-- Начинаем сразу с <div class="nav-bar"> ... -->
+
+    <div class="nav-bar">
+        <button class="nav-button" onclick="toggleSubmenu('management')">Управление</button>
+        <button class="nav-button" onclick="toggleSubmenu('reporting')">Отчётность</button>
+        <a class="nav-button" href="/">Выйти</a>
+    </div>
+
+    <!-- Второй уровень — Управление -->
+    <div id="submenu-management" class="sub-bar hidden">
+        <button class="sub-button" onclick="toggleSubmenu('books')">Книги</button>
+        <button class="sub-button" onclick="toggleSubmenu('authors')">Авторы</button>
+        <button class="sub-button" onclick="toggleSubmenu('genres')">Жанры</button>
+        <button class="sub-button" onclick="toggleSubmenu('users')">Пользователи</button>
+    </div>
+
+    <!-- Второй уровень — Отчётность -->
+    <div id="submenu-reporting" class="sub-bar hidden">
+        <a th:href="@{/admin/report/yearly}" class="sub-button">Годовая</a>
+        <button class="sub-button" onclick="loadReport('quarterly')">Квартальная</button>
+        <button class="sub-button" onclick="loadReport('yearly')">Годовая</button>
+        <button class="sub-button" onclick="loadReport('allTime')">За всё время</button>
+    </div>
+
+    <div id="actions-books" class="action-bar hidden">
+        <a th:href="@{/admin/books/add}" class="action-button">Добавить книгу</a>
+        <a th:href="@{/admin/books/update}" class="action-button">Обновить книгу</a>
+        <a th:href="@{/admin/books/delete}" class="action-button">Удалить книгу</a>
+    </div>
+
+    <!-- Действия: Авторы -->
+    <div id="actions-authors" class="action-bar hidden">
+        <a th:href="@{/admin/authors/add}" class="action-button">Добавить автора</a>
+        <a th:href="@{/admin/authors/update}" class="action-button">Обновить автора</a>
+        <a th:href="@{/admin/authors/delete}" class="action-button">Удалить автора</a>
+    </div>
+
+    <!-- Действия: Жанры -->
+    <div id="actions-genres" class="action-bar hidden">
+        <a th:href="@{/admin/genres/add}" class="action-button">Добавить жанр</a>
+        <a th:href="@{/admin/genres/update}" class="action-button">Обновить жанр</a>
+        <a th:href="@{/admin/genres/delete}" class="action-button">Удалить жанр</a>
+    </div>
+
+    <!-- Действия: Пользователи -->
+    <div id="actions-users" class="action-bar hidden">
+        <a th:href="@{/admin/users/add}" class="action-button">Добавить пользователя</a>
+        <a th:href="@{/admin/users/update}" class="action-button">Обновить пользователя</a>
+        <a th:href="@{/admin/users/delete}" class="action-button">Удалить пользователя</a>
+    </div>
+
+    <script>
+        function toggleSubmenu(section) {
+            // Если нажали "Управление" или "Отчётность"
+            if (section === 'management' || section === 'reporting') {
+                // Скрываем все подменю второго и третьего уровней
+                document.querySelectorAll('.sub-bar, .action-bar').forEach(el => el.classList.add('hidden'));
+
+                const submenu = document.getElementById(`submenu-${section}`);
+                if (submenu) submenu.classList.toggle('hidden');
+            }
+
+            // Если нажали кнопку из "Управление" (второй уровень)
+            else if (['books', 'authors', 'genres', 'users'].includes(section)) {
+                // Скрываем только подменю третьего уровня
+                document.querySelectorAll('.action-bar').forEach(el => el.classList.add('hidden'));
+
+                const submenu = document.getElementById(`submenu-${section}`) || document.getElementById(`actions-${section}`);
+                if (submenu) submenu.classList.toggle('hidden');
+            }
+        }
+
+
+        function performAction(entity, action) {
+            alert(`Вы выбрали: ${action} для ${entity}`);
+            // Здесь можно вызывать AJAX или переходить на другие страницы
+        }
+
+        function loadReport(period) {
+            alert(`Загружаем отчёт: ${period}`);
+            // Заменить alert на реальную логику
+        }
+    </script>
+</div>

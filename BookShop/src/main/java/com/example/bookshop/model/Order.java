@@ -26,7 +26,7 @@ public class Order extends AbstractBaseEntity{
     private LocalDate date;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate payment_date;
+        private LocalDate payment_date;
 
     @NotNull
     @Min(value = 1)

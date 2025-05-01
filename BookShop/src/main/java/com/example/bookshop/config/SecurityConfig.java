@@ -1,6 +1,8 @@
 package com.example.bookshop.config;
 
 import com.example.bookshop.service.UserService;
+import com.example.bookshop.util.CustomAuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +17,18 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfig {
 
     private final UserService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Autowired
-    public SecurityConfig(UserService userDetailsService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(UserService userDetailsService, PasswordEncoder passwordEncoder, CustomAuthenticationSuccessHandler successHandler) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.successHandler = successHandler;
     }
 
 
@@ -54,6 +59,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/perform_login")
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/genres")
+                        .successHandler(successHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout

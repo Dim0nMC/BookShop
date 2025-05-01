@@ -1,0 +1,72 @@
+
+.nav-bar {
+    display: flex;
+    gap: 20px;
+    background-color: #005f73;
+    padding: 16px 24px;
+    color: white;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sub-bar {
+    display: flex;
+    gap: 20px;
+    background-color: #0a9396;
+    padding: 12px 24px;
+    color: white;
+}
+
+.action-bar {
+    display: flex;
+    gap: 20px;
+    background-color: #94d2bd;
+    padding: 12px 24px;
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+.nav-button:hover,
+.sub-button:hover,
+.action-button:hover {
+    text-decoration: underline;
+}
+
+.sub-button,
+.action-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: white;
+}
+
+.action-button {
+    color: black;
+}
+
+.admin-top-nav,
+.admin-sub-nav {
+    display: flex;
+    gap: 12px;
+    background-color: #f1f1f1;
+    padding: 12px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.admin-sub-nav {
+    margin-top: -1px;
+}
+
+.hidden {
+    display: none;
+}
