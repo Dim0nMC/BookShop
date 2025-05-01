@@ -4,9 +4,7 @@ import com.example.bookshop.dto.BookResponse;
 import com.example.bookshop.model.Author;
 import com.example.bookshop.model.Book;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class BookUtil {
 
@@ -18,7 +16,8 @@ public class BookUtil {
                 book.getId(),
                 book.getName(),
                 author.getName()+" "+author.getSurname(),
-                book.getImage()
+                book.getImage(),
+                book.getPrice()
         );
         return bookResponse;
     }
@@ -33,7 +32,25 @@ public class BookUtil {
                     book.getId(),
                     book.getName(),
                     author.getName()+" "+author.getSurname(),
-                    book.getImage()
+                    book.getImage(),
+                    book.getPrice()
+            );
+            bookResponses.add(bookResponse);
+        }
+        return bookResponses;
+    }
+
+    public static Set<BookResponse> getBookResponse(Set<Book> books) {
+        Set<BookResponse> bookResponses = new HashSet<BookResponse>();
+        for(Book book : books) {
+            Iterator<Author> iterator = book.getAuthors().iterator();
+            Author author = iterator.next();
+            BookResponse bookResponse = new BookResponse(
+                    book.getId(),
+                    book.getName(),
+                    author.getName()+" "+author.getSurname(),
+                    book.getImage(),
+                    book.getPrice()
             );
             bookResponses.add(bookResponse);
         }
@@ -53,7 +70,8 @@ public class BookUtil {
                     book.getId(),
                     book.getName(),
                     author.getName()+" "+author.getSurname(),
-                    book.getImage()
+                    book.getImage(),
+                    book.getPrice()
             );
             bookResponses.add(bookResponse);
             i++;

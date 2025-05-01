@@ -11,12 +11,14 @@ public class BookResponse {
     private String name;
     private String author;
     private String image;
+    private int price;
 
-    public BookResponse(int id, String name, String author, String image) {
+    public BookResponse(int id, String name, String author, String image, int price) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.image = image;
+        this.price = price;
     }
 
     public int getId() {
@@ -49,6 +51,14 @@ public class BookResponse {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     @Override

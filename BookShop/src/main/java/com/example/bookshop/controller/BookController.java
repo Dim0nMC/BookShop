@@ -24,7 +24,8 @@ public class BookController {
 
     @GetMapping("/book/download/{bookId}")
     public ResponseEntity<Resource> downloadBook(@PathVariable Long bookId) throws IOException {
-        String fileName = bookId + ".pdf";
+        //String fileName = bookId + ".pdf";
+        String fileName = "oblomov.pdf";
         Path path = Paths.get("BookShop/book_pdf", fileName); // Путь относительно текущего рабочего каталога
 
         System.out.println("Проверяем путь: " + path.toAbsolutePath());

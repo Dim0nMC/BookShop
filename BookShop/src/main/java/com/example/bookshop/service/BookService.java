@@ -44,11 +44,11 @@ public class BookService {
     public List<Book> findByPart(String query) {
         List<Book> books = new ArrayList<>();
         String[] parts = query.split(" ");
-        for (String part : parts) {
-            books.addAll(bookRepository.findByNameContainingIgnoreCase(part));
-            books.addAll(bookRepository.findByAuthors_NameContainingIgnoreCaseOrAuthors_SurnameContainingIgnoreCase(part,part));
-            books.addAll(bookRepository.findByGenres_NameContainingIgnoreCase(part));
-        }
+        //for (String part : parts) {
+            books.addAll(bookRepository.findByNameContainingIgnoreCase(query));
+            books.addAll(bookRepository.findByAuthors_NameContainingIgnoreCaseOrAuthors_SurnameContainingIgnoreCase(query,query));
+            books.addAll(bookRepository.findByGenres_NameContainingIgnoreCase(query));
+        //}
 
         return books;
     }

@@ -117,9 +117,11 @@
                 <span class="age-badge" th:text="${book.age_restriction + '+'}">16+</span>
             </div>
 
+            <span sec:authorize="isAuthenticated()">
             <form th:action="@{'/cart/add/' + ${book.id}}" method="post" style="width: 100%; margin-top: 1.5rem;">
                 <button type="submit" class="add-to-cart-btn">Добавить в корзину</button>
             </form>
+            </span>
 
         </div>
 
@@ -137,7 +139,7 @@
 
             <!-- Статистика -->
                 <div class="book-stats">
-                    <div class="stat-item">
+                    <!--<div class="stat-item">
                         <div class="stat-icon">⭐</div>
                         <div class="stat-number" th:text="${book.raiting}">4.5</div>
                         <div class="stat-label">Рейтинг</div>
@@ -146,7 +148,7 @@
                         <div class="stat-icon">📖</div>
                         <div class="stat-number" th:text="${book.read_count}">1200</div>
                         <div class="stat-label">Прочитано</div>
-                    </div>
+                    </div>-->
                     <div class="stat-item">
                         <div class="stat-icon">🛒</div>
                         <div class="stat-number" th:text="${book.purchased_count}">300</div>

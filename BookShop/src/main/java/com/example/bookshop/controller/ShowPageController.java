@@ -5,6 +5,7 @@ import com.example.bookshop.model.Book;
 import com.example.bookshop.model.Genre;
 import com.example.bookshop.model.User;
 import com.example.bookshop.service.BookService;
+import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.GenreService;
 import com.example.bookshop.service.UserService;
 import com.example.bookshop.util.BookUtil;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -26,17 +28,26 @@ public class ShowPageController {
     private final BookService bookService;
     private final GenreService genreService;
     private final UserService userService;
+    private final CartService cartService;
 
     @Autowired
-    public ShowPageController(BookService bookService, GenreService genreService, UserService userService) {
+    public ShowPageController(BookService bookService, GenreService genreService, UserService userService, CartService cartService) {
         this.bookService = bookService;
         this.genreService = genreService;
         this.userService = userService;
+        this.cartService = new CartService();
     }
 
     @GetMapping("/")
     public String showIndex(Model model) {
-        List<BookResponse> books = BookUtil.getBookResponse(bookService.getAll(),12);
+        List<BookResponse> books = new ArrayList<>();
+
+        books.add(BookUtil.getBookResponse(bookService.getById(22)));
+        books.add(BookUtil.getBookResponse(bookService.getById(21)));
+        books.add(BookUtil.getBookResponse(bookService.getById(20)));
+        books.add(BookUtil.getBookResponse(bookService.getById(27)));
+
+        books.addAll(BookUtil.getBookResponse(bookService.getAll(),12));
         model.addAttribute("books", books);
         System.out.println(books.get(0).toString());
         return "index";
@@ -96,17 +107,14 @@ public class ShowPageController {
 
     @GetMapping("/profile/books")
     public String getProfileBooks(Model model, Authentication authentication) {
-        String username = authentication.getName();  // Получаем имя текущего пользователя
+        String username = authentication.getName();
         User user = userService.getByEmail(username);
-
         user.getBooks().forEach(System.out::println);
-
         Set<Book> books = user.getBooks();
-
         model.addAttribute("user", user);
         model.addAttribute("books", user.getBooks());
-        System.out.println(user.getImage());// Передаем данные пользователя в модель
-        return "profile-books";  // Вернем представление страницы профиля
+        System.out.println(user.getImage());
+        return "profile-books";
     }
 
     @GetMapping("/profile/orders")
@@ -127,6 +135,15 @@ public class ShowPageController {
         return "profile-security";  // Вернем представление страницы профиля
     }
 
+    @GetMapping("/profile/cart")
+    public String showCart(Model model, Authentication authentication) {
+        String username = authentication.getName();
+        User user = userService.getByEmail(username);
+        Set<BookResponse> cart = BookUtil.getBookResponse(user.getCart());
+        model.addAttribute("cart", cart);
+        model.addAttribute("totalPrice", cartService.getTotalPrice(cart));
+        return "cart";
+    }
 
 
 

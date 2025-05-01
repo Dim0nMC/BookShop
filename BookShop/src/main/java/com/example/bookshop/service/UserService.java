@@ -1,6 +1,7 @@
     package com.example.bookshop.service;
 
 
+    import com.example.bookshop.model.Book;
     import com.example.bookshop.model.User;
     import com.example.bookshop.repository.UserRepository;
     import com.example.bookshop.util.CustomUserDetails;
@@ -45,7 +46,7 @@
         public User update(Integer id, User userDetails) {
             User user = userRepository.findById(id).orElse(null);
             if(user != null) {
-                user.setName(userDetails.getName());
+                //user.setName(userDetails.getName());
                 return userRepository.save(user);
             }
             return null;
@@ -66,6 +67,11 @@
 
         public void delete(Integer id) {
             userRepository.deleteById(id);
+        }
+
+        public void addToCart(User user) {
+            userRepository.save(user);
+
         }
 
         @Override

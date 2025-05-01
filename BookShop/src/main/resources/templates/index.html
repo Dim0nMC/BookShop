@@ -21,17 +21,7 @@
 </section>
 
 
-<div sec:authorize="isAuthenticated()">
-    <p>Вы вошли как пользователь</p>
-</div>
 
-<div sec:authorize="!isAuthenticated()">
-    <p>Вы не вошли в систему</p>
-</div>
-
-<div sec:authorize="hasRole('ADMIN')">
-    <p>Вы администратор</p>
-</div>
 
 
 <!-- Поисковая форма -->

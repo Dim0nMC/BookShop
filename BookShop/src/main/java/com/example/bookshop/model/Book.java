@@ -1,6 +1,7 @@
 package com.example.bookshop.model;
 
 import com.example.bookshop.dto.BookDisplay;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.OnDelete;
@@ -43,7 +44,7 @@ public class Book extends AbstractBaseEntity {
     @Size(min = 1, max = 255)
     private String name;
 
-
+    private Integer price;
 
     private String image;
 
@@ -73,6 +74,8 @@ public class Book extends AbstractBaseEntity {
     @NotNull
     private int purchased_count;
 
+
+
     public Book() {}
 
     public Book(Set<Genre> genres, Set<Author> authors, String name, LocalDate published_data, int age_restriction, int page_count, double raiting, int read_count, int purchased_count) {
@@ -101,6 +104,7 @@ public class Book extends AbstractBaseEntity {
         this.raiting = raiting;
         this.read_count = read_count;
         this.purchased_count = purchased_count;
+
     }
 
     public Set<Genre> getGenres() {
@@ -205,5 +209,13 @@ public class Book extends AbstractBaseEntity {
 
     public void setPurchased_count(int purchased_count) {
         this.purchased_count = purchased_count;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }
