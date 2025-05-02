@@ -44,7 +44,7 @@ public class PdfReportService {
         document.add(new Paragraph("Общая выручка: " + yearlyReportDTO.getTotalIncome() + " руб."));
         document.add(new Paragraph("Количество уникальных книг: " + yearlyReportDTO.getTotalUniqueTitles()));
         document.add(new Paragraph("Количество проданных книг: " + yearlyReportDTO.getTotalBookCount()));
-        document.add(new Paragraph("Общая выручка по книгам: " + yearlyReportDTO.getTotalBookRevenue() + " руб."));
+        //document.add(new Paragraph("Общая выручка по книгам: " + yearlyReportDTO.getTotalBookRevenue() + " руб."));
 
         document.add(new Paragraph("\nДанные по месяцам:").setBold().setFontSize(14));
 
@@ -58,13 +58,13 @@ public class PdfReportService {
 
         for (YearlyReportDTO.MonthlyReportDTO monthReportDTO : yearlyReportDTO.getMonths()) {
             boolean firstBook = true;
+            monthTable.addCell(new Cell().add(new Paragraph(monthReportDTO.getMonthName())));
+            monthTable.addCell("");
+            monthTable.addCell("");
+            monthTable.addCell("");
             for (YearlyReportDTO.BookReportDTO bookReportDTO : monthReportDTO.getBooks()) {
                 if (firstBook) {
-                    monthTable.addCell(new Cell(bookReportDTO.getCount(), 1).add(new Paragraph(monthReportDTO.getMonthName())));
                     //monthTable.addCell(new Cell(bookReportDTO.getCount(), 1).add(new Paragraph(String.valueOf(monthReportDTO.getTotalIncome()))));
-                    monthTable.addCell("");
-                    monthTable.addCell("");
-                    monthTable.addCell("");
                     firstBook = false;
                 }
                 monthTable.addCell("");
@@ -76,6 +76,10 @@ public class PdfReportService {
             monthTable.addCell("");
             monthTable.addCell("");
             monthTable.addCell(String.valueOf(monthReportDTO.getTotalIncome()));
+            monthTable.addCell("\u00A0");
+            monthTable.addCell("\u00A0");
+            monthTable.addCell("\u00A0");
+            monthTable.addCell("\u00A0");
         }
 
         document.add(monthTable);

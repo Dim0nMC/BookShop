@@ -3,6 +3,7 @@ package com.example.bookshop.service;
 import com.example.bookshop.model.Author;
 import com.example.bookshop.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
+    @Cacheable
     public List<Author> findAll(){
         return authorRepository.findAll();
     }
