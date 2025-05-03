@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление книги</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Добавление книги</h1>
+
+<form id="bookForm" onsubmit="submitForm(event)">
+    <label>Название книги:
+        <input type="text" id="name" required>
+    </label>
+
+    <label>Цена:
+        <input type="number" id="price">
+    </label>
+
+    <label>Дата публикации:
+        <input type="date" id="published_data" required>
+    </label>
+
+    <label>Возрастное ограничение:
+        <input type="number" id="age_restriction" min="0" max="21" required>
+    </label>
+
+    <label>Количество страниц:
+        <input type="number" id="page_count" min="1" required>
+    </label>
+
+    <label>Описание:
+        <textarea id="description" maxlength="10000" rows="5"></textarea>
+    </label>
+
+    <label>Рейтинг:
+        <input type="number" id="raiting" min="0" max="5" step="0.1" required>
+    </label>
+
+    <label>Количество прочтений:
+        <input type="number" id="read_count" min="0" required>
+    </label>
+
+    <label>Количество покупок:
+        <input type="number" id="purchased_count" min="0" required>
+    </label>
+
+    <label>Жанры:
+        <select id="genres" multiple required>
+            <option th:each="genre : ${genres}"
+                    th:value="${genre.id}"
+                    th:text="${genre.name}"></option>
+        </select>
+    </label>
+
+    <label>Авторы:
+        <select id="authors" multiple required>
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.name + ' ' + author.surname}"></option>
+        </select>
+    </label>
+
+    <label>Изображение:
+        <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(event)">
+        <input type="hidden" id="imagePath">
+    </label>
+
+    <button type="submit" class = "form-button" >Сохранить</button>
+</form>
+
+<script>
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            document.getElementById('imagePath').value = 'uploads/' + file.name;
+        }
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        const selectedGenres = Array.from(document.getElementById('genres').selectedOptions)
+            .map(opt => parseInt(opt.value));
+        const selectedAuthors = Array.from(document.getElementById('authors').selectedOptions)
+            .map(opt => parseInt(opt.value));
+
+// Преобразуем массивы в Set (опционально, если хочешь уникальность на клиенте)
+        const genreSet = Array.from(new Set(selectedGenres));
+        const authorSet = Array.from(new Set(selectedAuthors));
+
+
+        const book = {
+            name: document.getElementById('name').value,
+            price: parseInt(document.getElementById('price').value) || null,
+            image: document.getElementById('imagePath').value,
+            published_data: document.getElementById('published_data').value,
+            age_restriction: parseInt(document.getElementById('age_restriction').value),
+            page_count: parseInt(document.getElementById('page_count').value),
+            description: document.getElementById('description').value,
+            raiting: parseFloat(document.getElementById('raiting').value),
+            read_count: parseInt(document.getElementById('read_count').value),
+            purchased_count: parseInt(document.getElementById('purchased_count').value),
+            genres: genreSet,
+            authors: authorSet
+        };
+
+        fetch('/admin/books/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(book)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Книга успешно добавлена');
+                    location.reload();
+                } else {
+                    alert('Ошибка при добавлении книги');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+</script>
+</body>
+</html>

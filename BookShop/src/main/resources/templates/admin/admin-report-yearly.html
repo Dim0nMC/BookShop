@@ -4,43 +4,6 @@
     <meta charset="UTF-8">
     <title>Годовой отчет</title>
     <link rel="stylesheet" th:href="@{/admin.css}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-
-        h1, h2 {
-            color: #333;
-        }
-
-        .month-section {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            border: 1px solid #999;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #eee;
-        }
-
-        .total {
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
 <div th:replace="fragments/admin-header :: adminHeader"></div>
@@ -76,6 +39,7 @@
     </table>
 </div>
 
+<div class="month-section">
 <h3>Общий отчёт по книгам за [[${report.year}]] год</h3>
 <table>
     <thead>
@@ -103,7 +67,7 @@
     </tr>
     </tfoot>
 </table>
-
+</div>
 
 </body>
 </html>

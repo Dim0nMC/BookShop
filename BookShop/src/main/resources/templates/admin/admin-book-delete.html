@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление книги</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Удаление книги</h1>
+
+<form id="deleteForm" onsubmit="deleteBook(event)">
+    <label>Выберите книгу для удаления:
+        <select id="bookSelector" name="bookId" required>
+            <option value="">-- Выберите книгу --</option>
+            <option th:each="book : ${books}"
+                    th:value="${book.id}"
+                    th:text="${book.name}"></option>
+        </select>
+    </label>
+
+    <button type="submit" class="form-button" style="background-color: #005f73;">Удалить</button>
+</form>
+
+<script>
+    function deleteBook(event) {
+        event.preventDefault();
+        const bookId = document.getElementById('bookSelector').value;
+        if (!bookId) {
+            alert('Пожалуйста, выберите книгу для удаления');
+            return;
+        }
+
+        if (!confirm('Вы уверены, что хотите удалить эту книгу?')) return;
+
+        fetch(`/admin/books/${bookId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Книга успешно удалена');
+                    removeBookFromSelector(bookId);  // Удаление книги из выпадающего списка
+                } else {
+                    alert('Ошибка при удалении книги');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+
+    // Удаление книги из выпадающего списка
+    function removeBookFromSelector(bookId) {
+        const bookSelector = document.getElementById('bookSelector');
+        const optionToRemove = Array.from(bookSelector.options).find(option => option.value == bookId);
+        if (optionToRemove) {
+            bookSelector.removeChild(optionToRemove);
+        }
+    }
+</script>
+
+</body>
+</html>

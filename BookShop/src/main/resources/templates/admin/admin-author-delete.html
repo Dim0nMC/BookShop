@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление автора</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Удаление автора</h1>
+
+<form id="deleteForm" onsubmit="deleteAuthor(event)">
+    <label>Выберите автора для удаления:
+        <select id="authorSelector" name="authorId" required>
+            <option value="">-- Выберите автора --</option>
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.name} + ' ' + ${author.surname}"></option>
+        </select>
+    </label>
+
+    <button type="submit" class="form-button" style="background-color: #005f73;">Удалить</button>
+</form>
+
+<script>
+    function deleteAuthor(event) {
+        event.preventDefault();
+        const authorId = document.getElementById('authorSelector').value;
+        if (!authorId) {
+            alert('Пожалуйста, выберите автора для удаления');
+            return;
+        }
+
+        if (!confirm('Вы уверены, что хотите удалить этого автора?')) return;
+
+        fetch(`/admin/authors/${authorId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Автор успешно удалён');
+                    removeAuthorFromSelector(authorId);  // Удаление автора из выпадающего списка
+                } else {
+                    alert('Ошибка при удалении автора');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+
+    // Удаление автора из выпадающего списка
+    function removeAuthorFromSelector(authorId) {
+        const authorSelector = document.getElementById('authorSelector');
+        const optionToRemove = Array.from(authorSelector.options).find(option => option.value == authorId);
+        if (optionToRemove) {
+            authorSelector.removeChild(optionToRemove);
+        }
+    }
+</script>
+
+</body>
+</html>

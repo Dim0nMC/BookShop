@@ -56,11 +56,6 @@ public class ShowPageController {
         return "index";
     }
 
-    @GetMapping("/rest/admin/book")
-    public String showAddBookForm() {
-        System.out.println("showAddBookForm");
-        return "addBook";
-    }
 
     @GetMapping("/search")
     public String showSearchForm(@RequestParam("query") String query, Model model) {

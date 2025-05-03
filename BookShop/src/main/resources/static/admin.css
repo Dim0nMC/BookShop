@@ -1,3 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+select[multiple] {
+    height: 100px;
+}
+
+textarea {
+    resize: vertical;
+}
 
 .nav-bar {
     display: flex;
@@ -69,4 +111,49 @@
 
 .hidden {
     display: none;
+}
+
+
+
+.form-button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background-color: #005f73;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+.form-button:hover  {
+    background-color: #004d99;
+}
+
+.month-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #999;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #eee;
+}
+
+.total {
+    font-weight: bold;
 }

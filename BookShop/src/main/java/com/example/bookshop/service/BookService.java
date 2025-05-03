@@ -1,5 +1,7 @@
 package com.example.bookshop.service;
 
+import com.example.bookshop.dto.BookAddDTO;
+import com.example.bookshop.dto.BookUpdateDTO;
 import com.example.bookshop.model.Author;
 import com.example.bookshop.model.Book;
 import com.example.bookshop.model.Genre;
@@ -69,17 +71,19 @@ public class BookService {
     }
 
     @Transactional
-    public void create(BookRequest bookRequest) {
+    public void create(BookAddDTO bookRequest) {
         Book newBook = new Book();
 
         newBook.setName(bookRequest.getName());
-        newBook.setPublished_data(bookRequest.getPublishedDate());
-        newBook.setAge_restriction(bookRequest.getAgeRestriction());
-        newBook.setPage_count(bookRequest.getPageCount());
+        newBook.setPublished_data(bookRequest.getPublished_data());
+        newBook.setAge_restriction(bookRequest.getAge_restriction());
+        newBook.setPage_count(bookRequest.getPage_count());
         newBook.setDescription(bookRequest.getDescription());
+        newBook.setImage(bookRequest.getImage());
+        newBook.setPrice(bookRequest.getPrice());
         newBook.setRaiting(bookRequest.getRaiting() != null ? bookRequest.getRaiting() : 0.0);
-        newBook.setRead_count(bookRequest.getReadCount() != null ? bookRequest.getReadCount() : 0);
-        newBook.setPurchased_count(bookRequest.getPurchasedCount() != null ? bookRequest.getPurchasedCount() : 0);
+        newBook.setRead_count(bookRequest.getRead_count() != null ? bookRequest.getRead_count() : 0);
+        newBook.setPurchased_count(bookRequest.getPurchased_count() != null ? bookRequest.getPurchased_count() : 0);
 
 //        Set<Integer> authorsID = bookRequest.getAuthors();
 //        Set<Author> authorObjects = new HashSet<>();
@@ -118,20 +122,22 @@ public class BookService {
     }
 
     @Transactional
-    public Book update(BookRequest bookRequest) {
+    public Book update(BookUpdateDTO bookRequest) {
         Assert.notNull(bookRequest, "Book must not be null");
         Assert.notNull(bookRequest.getId(), "Book id must not be null");
 
         Book updatedBook = bookRepository.findById(bookRequest.getId()).orElse(null);
 
         updatedBook.setName(bookRequest.getName());
-        updatedBook.setPublished_data(bookRequest.getPublishedDate());
-        updatedBook.setAge_restriction(bookRequest.getAgeRestriction());
-        updatedBook.setPage_count(bookRequest.getPageCount());
+        updatedBook.setPublished_data(bookRequest.getPublished_data());
+        updatedBook.setAge_restriction(bookRequest.getAge_restriction());
+        updatedBook.setPage_count(bookRequest.getPage_count());
         updatedBook.setDescription(bookRequest.getDescription());
+        updatedBook.setImage(bookRequest.getImage());
+        updatedBook.setPrice(bookRequest.getPrice());
         updatedBook.setRaiting(bookRequest.getRaiting() != null ? bookRequest.getRaiting() : 0.0);
-        updatedBook.setRead_count(bookRequest.getReadCount() != null ? bookRequest.getReadCount() : 0);
-        updatedBook.setPurchased_count(bookRequest.getPurchasedCount() != null ? bookRequest.getPurchasedCount() : 0);
+        updatedBook.setRead_count(bookRequest.getRead_count() != null ? bookRequest.getRead_count() : 0);
+        updatedBook.setPurchased_count(bookRequest.getPurchased_count() != null ? bookRequest.getPurchased_count() : 0);
 
         Set<Author> authorObjects = new HashSet<>(authorRepository.findAllById(bookRequest.getAuthors()));
         Set<Genre> genreObjects = new HashSet<>(genreRepository.findAllById(bookRequest.getGenres()));
@@ -156,15 +162,15 @@ public class BookService {
     public void delete(int id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
-        for (Author author : book.getAuthors()) {
-            author.getBooks().remove(book);
-            authorRepository.save(author);
-        }
-
-        for (Genre genre : book.getGenres()) {
-            genre.getBooks().remove(book);
-            genreRepository.save(genre);
-        }
+//        for (Author author : book.getAuthors()) {
+//            author.getBooks().remove(book);
+//            authorRepository.save(author);
+//        }
+//
+//        for (Genre genre : book.getGenres()) {
+//            genre.getBooks().remove(book);
+//            genreRepository.save(genre);
+//        }
 
         bookRepository.delete(book);
     }

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление книги</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Редактирование книги</h1>
+
+
+
+<form id="bookForm" onsubmit="submitForm(event)">
+    <label>Выберите книгу для редактирования:
+        <select id="bookSelector" onchange="loadBookData()">
+            <option value="">-- Выберите книгу --</option>
+            <option th:each="book : ${books}"
+                    th:value="${book.id}"
+                    th:text="${book.name}"></option>
+        </select>
+    </label>
+
+    <label>Название книги:
+        <input type="text" id="name" required>
+    </label>
+
+    <label>Цена:
+        <input type="number" id="price">
+    </label>
+
+    <label>Дата публикации:
+        <input type="date" id="published_data" required>
+    </label>
+
+    <label>Возрастное ограничение:
+        <input type="number" id="age_restriction" min="0" max="21" required>
+    </label>
+
+    <label>Количество страниц:
+        <input type="number" id="page_count" min="1" required>
+    </label>
+
+    <label>Описание:
+        <textarea id="description" maxlength="10000" rows="5"></textarea>
+    </label>
+
+    <label>Рейтинг:
+        <input type="number" id="raiting" min="0" max="5" step="0.1" required>
+    </label>
+
+    <label>Количество прочтений:
+        <input type="number" id="read_count" min="0" required>
+    </label>
+
+    <label>Количество покупок:
+        <input type="number" id="purchased_count" min="0" required>
+    </label>
+
+    <label>Жанры:
+        <select id="genres" multiple required>
+            <option th:each="genre : ${genres}"
+                    th:value="${genre.id}"
+                    th:text="${genre.name}"></option>
+        </select>
+    </label>
+
+    <label>Авторы:
+        <select id="authors" multiple required>
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.name + ' ' + author.surname}"></option>
+        </select>
+    </label>
+
+    <label>Изображение:
+        <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(event)">
+        <input type="hidden" id="imagePath">
+    </label>
+    <img id="preview" src="" alt="Превью" style="max-width: 200px; display: none; margin-top: 10px;">
+
+    <button type="submit" class = "form-button" >Сохранить</button>
+</form>
+
+<script>
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Установим путь для сервера
+            document.getElementById('imagePath').value = 'uploads/' + file.name;
+
+            // Покажем локальное превью
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        const selectedGenres = Array.from(document.getElementById('genres').selectedOptions)
+            .map(opt => parseInt(opt.value));
+        const selectedAuthors = Array.from(document.getElementById('authors').selectedOptions)
+            .map(opt => parseInt(opt.value));
+
+        const book = {
+            id:document.getElementById('bookSelector').value,
+            name: document.getElementById('name').value,
+            price: parseInt(document.getElementById('price').value) || null,
+            image: document.getElementById('imagePath').value,
+            published_data: document.getElementById('published_data').value,
+            age_restriction: parseInt(document.getElementById('age_restriction').value),
+            page_count: parseInt(document.getElementById('page_count').value),
+            description: document.getElementById('description').value,
+            raiting: parseFloat(document.getElementById('raiting').value),
+            read_count: parseInt(document.getElementById('read_count').value),
+            purchased_count: parseInt(document.getElementById('purchased_count').value),
+            genres: Array.from(new Set(selectedGenres)),
+            authors: Array.from(new Set(selectedAuthors))
+        };
+
+        fetch('/admin/books/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(book)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Книга успешно обновлена');
+                    location.reload();
+                } else {
+                    alert('Ошибка при добавлении книги');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+
+    function loadBookData() {
+        const bookId = document.getElementById('bookSelector').value;
+        if (!bookId) return;
+
+        fetch(`/admin/books/${bookId}`)
+            .then(response => response.json())
+            .then(book => {
+                document.getElementById('name').value = book.name;
+                document.getElementById('price').value = book.price || '';
+                document.getElementById('published_data').value = book.published_data;
+                document.getElementById('age_restriction').value = book.age_restriction;
+                document.getElementById('page_count').value = book.page_count;
+                document.getElementById('description').value = book.description;
+                document.getElementById('raiting').value = book.raiting;
+                document.getElementById('read_count').value = book.read_count;
+                document.getElementById('purchased_count').value = book.purchased_count;
+                document.getElementById('imagePath').value = book.image || '';
+
+                // Показываем превью, если есть изображение
+                const preview = document.getElementById('preview');
+                if (book.image) {
+                    preview.src = '/' + book.image;
+                    preview.style.display = 'block';
+                } else {
+                    preview.style.display = 'none';
+                    preview.src = '';
+                }
+
+                const genreSelect = document.getElementById('genres');
+                Array.from(genreSelect.options).forEach(opt => {
+                    opt.selected = book.genres.includes(Number(opt.value));
+                });
+
+                const authorSelect = document.getElementById('authors');
+                Array.from(authorSelect.options).forEach(opt => {
+                    opt.selected = book.authors.includes(Number(opt.value));
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки книги:', error);
+                alert('Ошибка при загрузке данных книги');
+            });
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление автора</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Добавление автора</h1>
+
+<form id="authorForm" onsubmit="submitForm(event)">
+    <label>Имя:
+        <input type="text" id="name" required>
+    </label>
+
+    <label>Фамилия:
+        <input type="text" id="surname" required>
+    </label>
+
+    <label>Описание:
+        <textarea id="about" maxlength="10000" rows="5"></textarea>
+    </label>
+
+    <button type="submit" class="form-button" style="background-color: #005f73;">Сохранить</button>
+</form>
+
+<script>
+    function submitForm(event) {
+        event.preventDefault();
+
+        const author = {
+            name: document.getElementById('name').value,
+            surname: document.getElementById('surname').value,
+            about: document.getElementById('about').value
+        };
+
+        fetch('/admin/authors/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(author)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Автор успешно добавлен');
+                    location.reload();
+                } else {
+                    alert('Ошибка при добавлении автора');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+</script>
+
+</body>
+</html>

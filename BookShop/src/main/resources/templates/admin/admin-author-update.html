@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование автора</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Редактирование автора</h1>
+
+<form id="authorForm" onsubmit="submitForm(event)">
+    <label>Выберите автора для редактирования:
+        <select id="authorSelector" onchange="loadAuthorData()">
+            <option value="">-- Выберите автора --</option>
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.name + ' ' + author.surname}"></option>
+        </select>
+    </label>
+
+    <label>Имя:
+        <input type="text" id="name" required>
+    </label>
+
+    <label>Фамилия:
+        <input type="text" id="surname" required>
+    </label>
+
+    <label>Описание:
+        <textarea id="about" maxlength="10000" rows="5"></textarea>
+    </label>
+
+    <button type="submit" class="form-button" style="background-color: #005f73;">Сохранить</button>
+</form>
+
+<script>
+    function submitForm(event) {
+        event.preventDefault();
+
+        const author = {
+            id: document.getElementById('authorSelector').value,
+            name: document.getElementById('name').value,
+            surname: document.getElementById('surname').value,
+            about: document.getElementById('about').value
+        };
+
+        fetch('/admin/authors/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(author)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Автор успешно обновлён');
+                    location.reload();
+                } else {
+                    alert('Ошибка при обновлении автора');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+
+    function loadAuthorData() {
+        const authorId = document.getElementById('authorSelector').value;
+        if (!authorId) return;
+
+        fetch(`/admin/authors/${authorId}`)
+            .then(response => response.json())
+            .then(author => {
+                document.getElementById('name').value = author.name;
+                document.getElementById('surname').value = author.surname;
+                document.getElementById('about').value = author.about;
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки автора:', error);
+                alert('Ошибка при загрузке данных автора');
+            });
+    }
+</script>
+
+</body>
+</html>

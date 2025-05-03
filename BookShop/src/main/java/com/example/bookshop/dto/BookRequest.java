@@ -43,6 +43,9 @@ public class BookRequest {
     @JsonProperty("genres")
     private Set<Integer> genres;
 
+    @JsonProperty("price")
+    private int price;
+
     public Integer getId() {
         return id;
     }

@@ -26,7 +26,7 @@
             </span>
 
             <span sec:authorize="isAuthenticated()">
-                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/panel">Админ-панель</a>
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin">Админ-панель</a>
             </span>
 
         </nav>

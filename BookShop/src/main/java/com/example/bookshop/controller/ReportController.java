@@ -31,7 +31,7 @@ public class ReportController {
         YearlyReportDTO report = reportService.generateYearlyReport(year);
         model.addAttribute("report", report);
         model.addAttribute("activeSection", "reporting");
-        return "admin-report-yearly";
+        return "admin/admin-report-yearly";
     }
 
     @GetMapping("/generate-pdf")

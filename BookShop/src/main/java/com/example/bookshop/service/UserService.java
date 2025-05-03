@@ -1,25 +1,32 @@
     package com.example.bookshop.service;
 
 
-    import com.example.bookshop.model.Book;
     import com.example.bookshop.model.User;
     import com.example.bookshop.repository.UserRepository;
     import com.example.bookshop.util.CustomUserDetails;
+    import com.example.bookshop.util.exception.UserDeleteViolationException;
+    import com.example.bookshop.util.exception.UserUpdateViolationException;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.core.userdetails.UserDetails;
     import org.springframework.security.core.userdetails.UserDetailsService;
     import org.springframework.security.core.userdetails.UsernameNotFoundException;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
+    import org.springframework.util.Assert;
 
     import java.util.List;
 
+    import static com.example.bookshop.util.ValidationUtil.checkNotFoundWithId;
+
+
     @Service
     public class UserService implements UserDetailsService    {
+        private final UserRepository userRepository;
+        private final PasswordEncoder passwordEncoder;
 
-
-        private UserRepository userRepository;
-        private PasswordEncoder passwordEncoder;
+        private final String CANT_DELETE_USER_MSG = "User cannot be deleted";
+        private final String CANT_UPDATE_USER_MSG = "User cannot be updated";
+        private final int MAX_PREDEFINED_USER_ID = 2;
 
         @Autowired
         public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -28,6 +35,7 @@
         }
 
         public User create(User user) {
+            Assert.notNull(user, "User must not be null");
             return userRepository.save(user);
         }
 
@@ -40,16 +48,22 @@
         }
 
         public User getById(Integer id) {
-            return userRepository.findById(id).orElse(null);
+            return checkNotFoundWithId(userRepository.findById(id).orElse(null), id);
         }
 
         public User update(Integer id, User userDetails) {
-            User user = userRepository.findById(id).orElse(null);
-            if(user != null) {
-                //user.setName(userDetails.getName());
-                return userRepository.save(user);
-            }
-            return null;
+            Assert.notNull(userDetails, "User must not be null");
+            Assert.notNull(userDetails.getId(), "User id must not be null");
+            User user = getById(id);
+            checkUpdateRestrictions(id);
+            return userRepository.save(user);
+
+//            User user = userRepository.findById(id).orElse(null);
+//            if(user != null) {
+//                //user.setName(userDetails.getName());
+//                return userRepository.save(user);
+//            }
+//            return null;
         }
 
         public boolean changePassword(String username, String oldPassword, String newPassword) {
@@ -65,8 +79,13 @@
             return true;
         }
 
-        public void delete(Integer id) {
-            userRepository.deleteById(id);
+//        public void delete(Integer id) {
+//            userRepository.deleteById(id);
+//        }
+
+        public void delete(int id) {
+            checkDeleteRestrictions(id);
+            checkNotFoundWithId(userRepository.delete(id) != 0, id);
         }
 
         public void addToCart(User user) {
@@ -82,6 +101,19 @@
 
             // Возвращаем объект CustomUserDetails, реализующий UserDetails
             return new CustomUserDetails(user);
+        }
+
+
+        private void checkDeleteRestrictions(int userId) {
+            if (userId == MAX_PREDEFINED_USER_ID) {
+                throw new UserDeleteViolationException(CANT_DELETE_USER_MSG);
+            }
+        }
+
+        private void checkUpdateRestrictions(int userId) {
+            if (userId == MAX_PREDEFINED_USER_ID) {
+                throw new UserUpdateViolationException(CANT_UPDATE_USER_MSG);
+            }
         }
 
     }
