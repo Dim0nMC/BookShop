@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование жанра</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Редактирование жанра</h1>
+
+<form id="genreForm" onsubmit="submitGenre(event)">
+    <label>Выберите жанр для редактирования:
+        <select id="genreSelector" onchange="loadGenreData()">
+            <option value="">-- Выберите жанр --</option>
+            <option th:each="genre : ${genres}"
+                    th:value="${genre.id}"
+                    th:text="${genre.name}"></option>
+        </select>
+    </label>
+
+    <label>Название жанра:
+        <input type="text" id="name" required>
+    </label>
+
+    <button type="submit" class="form-button" style="background-color: #005f73;">Сохранить</button>
+</form>
+
+<script>
+    function submitGenre(event) {
+        event.preventDefault();
+
+        const genre = {
+            id: document.getElementById('genreSelector').value,
+            name: document.getElementById('name').value
+        };
+
+        fetch('/admin/genres/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(genre)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Жанр успешно обновлён');
+                    location.reload();
+                } else {
+                    alert('Ошибка при обновлении жанра');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+
+    function loadGenreData() {
+        const genreId = document.getElementById('genreSelector').value;
+        if (!genreId) return;
+
+        fetch(`/admin/genres/${genreId}`)
+            .then(response => response.json())
+            .then(genre => {
+                document.getElementById('name').value = genre.name;
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки жанра:', error);
+                alert('Ошибка при загрузке данных жанра');
+            });
+    }
+</script>
+
+</body>
+</html>

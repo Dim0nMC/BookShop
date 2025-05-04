@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление жанра</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+</head>
+<body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Удаление жанра</h1>
+
+<form id="deleteGenreForm" onsubmit="deleteGenre(event)">
+    <label>Выберите жанр для удаления:
+        <select id="genreSelector" name="genreId" required>
+            <option value="">-- Выберите жанр --</option>
+            <option th:each="genre : ${genres}"
+                    th:value="${genre.id}"
+                    th:text="${genre.name}"></option>
+        </select>
+    </label>
+
+    <button type="submit" class="form-button" style="background-color: #005f73;">Удалить</button>
+</form>
+
+<script>
+    function deleteGenre(event) {
+        event.preventDefault();
+        const genreId = document.getElementById('genreSelector').value;
+        if (!genreId) {
+            alert('Пожалуйста, выберите жанр для удаления');
+            return;
+        }
+
+        if (!confirm('Вы уверены, что хотите удалить этот жанр?')) return;
+
+        fetch(`/admin/genres/${genreId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Жанр успешно удалён');
+                    removeGenreFromSelector(genreId);
+                } else {
+                    alert('Ошибка при удалении жанра');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке запроса');
+            });
+    }
+
+    function removeGenreFromSelector(genreId) {
+        const genreSelector = document.getElementById('genreSelector');
+        const optionToRemove = Array.from(genreSelector.options).find(option => option.value == genreId);
+        if (optionToRemove) {
+            genreSelector.removeChild(optionToRemove);
+        }
+    }
+</script>
+
+</body>
+</html>

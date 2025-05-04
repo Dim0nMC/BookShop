@@ -21,4 +21,20 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
+    public Genre findById(int id) {
+        return genreRepository.findById(id).get();
+    }
+
+    public Genre create(Genre genre) {
+        return genreRepository.save(genre);
+    }
+
+    public Genre update(Genre genre) {
+        return genreRepository.save(genre);
+    }
+
+    public void delete(int id) {
+        genreRepository.deleteById(id);
+    }
+
 }

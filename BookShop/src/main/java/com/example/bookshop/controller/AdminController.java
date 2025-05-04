@@ -70,5 +70,22 @@ public class AdminController {
         model.addAttribute("authors", authorRepository.findAll());
         return "admin/admin-author-delete";
     }
+
+    @GetMapping("/genres/add")
+    public String genreAdd(Model model) {
+        return "admin/admin-genre-add";
+    }
+
+    @GetMapping("/genres/update")
+    public String genreUpdate(Model model) {
+        model.addAttribute("genres", genreRepository.findAll());
+        return "admin/admin-genre-update";
+    }
+
+    @GetMapping("/genres/delete")
+    public String genreDelete(Model model) {
+        model.addAttribute("genres", genreRepository.findAll());
+        return "admin/admin-genre-delete";
+    }
 }
 
