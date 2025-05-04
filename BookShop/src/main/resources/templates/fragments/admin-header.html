@@ -5,7 +5,7 @@
 
     <div class="nav-bar">
         <button class="nav-button" onclick="toggleSubmenu('management')">Управление</button>
-        <button class="nav-button" onclick="toggleSubmenu('reporting')">Отчётность</button>
+        <a th:href="@{/admin/report/yearly}" class="nav-button">Отчётность</a>
         <a class="nav-button" href="/">Выйти</a>
     </div>
 
@@ -14,16 +14,16 @@
         <button class="sub-button" onclick="toggleSubmenu('books')">Книги</button>
         <button class="sub-button" onclick="toggleSubmenu('authors')">Авторы</button>
         <button class="sub-button" onclick="toggleSubmenu('genres')">Жанры</button>
-        <button class="sub-button" onclick="toggleSubmenu('users')">Пользователи</button>
+        <button class="sub-button" onclick="toggleSubmenu('users')">Заказы</button>
     </div>
 
     <!-- Второй уровень — Отчётность -->
-    <div id="submenu-reporting" class="sub-bar hidden">
-        <a th:href="@{/admin/report/yearly}" class="sub-button">Годовая</a>
+    <!--<div id="submenu-reporting" class="sub-bar hidden">
+        <a th:href="@{/admin/report/yearly}" class="nav-button">Годовая</a>
         <button class="sub-button" onclick="loadReport('quarterly')">Квартальная</button>
         <button class="sub-button" onclick="loadReport('yearly')">Годовая</button>
         <button class="sub-button" onclick="loadReport('allTime')">За всё время</button>
-    </div>
+    </div> -->
 
     <div id="actions-books" class="action-bar hidden">
         <a th:href="@{/admin/books/add}" class="action-button">Добавить книгу</a>
@@ -47,9 +47,8 @@
 
     <!-- Действия: Пользователи -->
     <div id="actions-users" class="action-bar hidden">
-        <a th:href="@{/admin/users/add}" class="action-button">Добавить пользователя</a>
-        <a th:href="@{/admin/users/update}" class="action-button">Обновить пользователя</a>
-        <a th:href="@{/admin/users/delete}" class="action-button">Удалить пользователя</a>
+        <a th:href="@{/admin/orders/update}" class="action-button">Изменить заказ</a>
+        <a th:href="@{/admin/orders/list}" class="action-button">Список заказов</a>
     </div>
 
     <script>

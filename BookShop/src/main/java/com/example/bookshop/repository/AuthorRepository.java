@@ -9,18 +9,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
     @Transactional
     @Modifying
     @Query("delete from Author a where a.id = :id")
     @CacheEvict(value = {"authors", "authors_list"}, key = "#id")
-    void delete(@Param("id") int id);
-
+    int delete(@Param("id") int id);
 
     @Override
     @Transactional
     @CachePut(value = "authors", key = "#author.id")
     @CacheEvict(value = "authors_list", allEntries = true)
     Author save(Author author);
+
+    @Query("select a from Author a where upper(a.surname) like upper(:surname) order by a.surname")
+    List<Author> findBySurnameIgnoreCase(@Param("surname") String surname);
 }

@@ -14,7 +14,7 @@ import static com.example.bookshop.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class AuthorService {
-    private final Sort SORT_NAME = Sort.by(Sort.Direction.ASC, "name");
+    private final Sort SORT_SURNAME = Sort.by(Sort.Direction.ASC, "surname");
 
     private final AuthorRepository authorRepository;
 
@@ -30,7 +30,11 @@ public class AuthorService {
 
     @Cacheable(value = "authors_list")
     public List<Author> findAll(){
-        return authorRepository.findAll(SORT_NAME);
+        return authorRepository.findAll(SORT_SURNAME);
+    }
+
+    public List<Author> findBySurname(String surname) {
+        return authorRepository.findBySurnameIgnoreCase(surname + "%");
     }
 
     @Cacheable(value = "authors", key = "#id")
@@ -46,8 +50,6 @@ public class AuthorService {
     }
 
     public void delete(int id){
-        authorRepository.delete(id);
-        // Если нужно, добавьте проверку, если книга не существует
-        checkNotFoundWithId(true, id);
+        checkNotFoundWithId(authorRepository.delete(id) != 0, id);
     }
 }

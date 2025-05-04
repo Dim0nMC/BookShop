@@ -7,11 +7,14 @@ import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/admin/authors")
+@RequestMapping(value = "/admin/authors")
 public class AdminAuthorController {
 
     @Autowired
