@@ -23,6 +23,11 @@ public class Genre extends AbstractBaseEntity{
 
     public Genre() {}
 
+    public Genre(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Genre(String name, Set<Book> books) {
         this.name = name;
         this.books = books;

@@ -1,9 +1,13 @@
 package com.example.bookshop.controller;
 
+import com.example.bookshop.model.Order;
+import com.example.bookshop.model.User;
 import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.repository.GenreRepository;
 import com.example.bookshop.repository.OrderRepository;
+import com.example.bookshop.service.OrderService;
+import com.example.bookshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -11,22 +15,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final OrderRepository orderRepository;
+    OrderService orderService;
+    UserService userService;
+
+    OrderRepository orderRepository;
     AuthorRepository authorRepository;
     BookRepository bookRepository;
     GenreRepository genreRepository;
 
     @Autowired
-    public AdminController(AuthorRepository authorRepository, BookRepository bookRepository, GenreRepository genreRepository, OrderRepository orderRepository) {
+    public AdminController(AuthorRepository authorRepository, BookRepository bookRepository, GenreRepository genreRepository, OrderRepository orderRepository, UserService userService, OrderService orderService) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.orderRepository = orderRepository;
+        this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -93,14 +106,29 @@ public class AdminController {
 
     @GetMapping("/orders/list")
     public String orderList(Model model) {
-        model.addAttribute("books", bookRepository.findAll());
-        model.addAttribute("orders", orderRepository.findAll());
+//        List<User> users = userService.getAll();
+//        model.addAttribute("users", users);
+
+        List<Order> allOrders = orderService.findAll();
+
+        List<Order> pendingOrders = allOrders.stream()
+                .filter(o -> !"Оплачен".equalsIgnoreCase(o.getStatus()))
+                .sorted(Comparator.comparing(Order::getDate))
+                .collect(Collectors.toList());
+
+        List<Order> paidOrders = allOrders.stream()
+                .filter(o -> "Оплачен".equalsIgnoreCase(o.getStatus()))
+                .sorted(Comparator.comparing(Order::getDate))
+                .collect(Collectors.toList());
+
+        model.addAttribute("pendingOrders", pendingOrders);
+        model.addAttribute("paidOrders", paidOrders);
+
         return "admin/admin-order-list";
     }
 
     @GetMapping("/orders/update")
     public String orderUpdate(Model model) {
-        model.addAttribute("orders", orderRepository.findAll());
         return "admin/admin-order-update";
     }
 }

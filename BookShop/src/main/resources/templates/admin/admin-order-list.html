@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Список заказов</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
 </head>
 <body>
+<div th:replace="fragments/admin-header :: adminHeader"></div>
+
+<h1>Список заказов</h1>
+
+<h2>Оплаченные заказы</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Дата создания</th>
+        <th>Пользователь</th>
+        <th>Книги</th>
+        <th>Стоимость</th>
+        <th>Статус</th>
+        <th>Дата оплаты</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${paidOrders}">
+        <td th:text="${order.date}"></td>
+        <td th:text="${order.user_id.name}"></td>
+        <td>
+    <span th:each="od, iterStat : ${order.orderDetailsSet}">
+        <span th:text="${od.book.name}"></span><span th:if="${!iterStat.last}">, </span>
+    </span>
+        </td>
+        <td th:text="${order.cost} + ' ₽'"></td>
+        <td th:text="${order.status}"></td>
+        <td th:text="${order.payment_date}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Заказы в обработке</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Дата создания</th>
+        <th>Пользователь</th>
+        <th>Книги</th>
+        <th>Стоимость</th>
+        <th>Статус</th>
+        <th>Дата оплаты</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${pendingOrders}">
+        <td th:text="${order.date}"></td>
+        <td th:text="${order.user_id.name}"></td>
+        <td>
+    <span th:each="od, iterStat : ${order.orderDetailsSet}">
+        <span th:text="${od.book.name}"></span><span th:if="${!iterStat.last}">, </span>
+    </span>
+        </td>
+        <td th:text="${order.cost} + ' ₽'"></td>
+        <td th:text="${order.status}"></td>
+        <td>-</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
