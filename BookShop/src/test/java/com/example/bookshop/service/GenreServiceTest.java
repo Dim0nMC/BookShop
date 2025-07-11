@@ -31,7 +31,7 @@ class GenreServiceTest extends AbstractTest {
     @Test
     void findById() {
         Genre genre = genreService.findById(GenreTestData.GENRE1_ID);
-        assertThat(genre).isEqualTo(GenreTestData.genre1);
+        assertThat(genre).usingRecursiveComparison().ignoringFields("books").isEqualTo(GenreTestData.genre1);
     }
 
     @Test
@@ -45,8 +45,8 @@ class GenreServiceTest extends AbstractTest {
         Genre created = genreService.create(newGenre);
         int newId = created.getId();
         newGenre.setId(newId);
-        assertThat(created).isEqualTo(newGenre);
-        assertThat(genreService.findById(newId)).isEqualTo(newGenre);
+        assertThat(created).usingRecursiveComparison().ignoringFields("books").isEqualTo(newGenre);
+        assertThat(genreService.findById(newId)).usingRecursiveComparison().ignoringFields("books").isEqualTo(newGenre);
     }
 
     @Test
@@ -60,7 +60,7 @@ class GenreServiceTest extends AbstractTest {
         Genre updated = GenreTestData.getUpdated();
         genreService.update(updated);
         Genre actual = genreService.findById(updated.getId());
-        assertThat(actual).isEqualTo(updated);
+        assertThat(actual).usingRecursiveComparison().ignoringFields("books").isEqualTo(updated);
     }
 
     @Test

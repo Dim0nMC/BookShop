@@ -1,6 +1,7 @@
 package com.example.bookshop.model;
 
 import ch.qos.logback.core.model.INamedModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,16 +10,19 @@ import java.util.Set;
 
 @Entity
 @Table(name = "genres")
+@Schema(description = "All details about the Genre entity.")
 public class Genre extends AbstractBaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Integer id;
 
     @NotBlank
     @Size(max = 50)
+    @Schema(title = "The entity name")
     private String name;
 
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany(mappedBy = "genres",  fetch = FetchType.LAZY)
+//    @Schema(title = "Set of Book entities of this Genre")
     private Set<Book> books;
 
     public Genre() {}

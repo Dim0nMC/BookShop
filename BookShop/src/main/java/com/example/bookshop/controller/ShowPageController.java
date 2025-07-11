@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,7 +60,7 @@ public class ShowPageController {
 
     @GetMapping("/search")
     public String showSearchForm(@RequestParam("query") String query, Model model) {
-        List<BookResponse> books = BookUtil.getBookResponse(bookService.findByPart(query));
+        Set<BookResponse> books = BookUtil.getBookResponse(bookService.findByPart(query));
         model.addAttribute("books", books);
         model.addAttribute("query", query);
         //System.out.println(books.get(0).toString());

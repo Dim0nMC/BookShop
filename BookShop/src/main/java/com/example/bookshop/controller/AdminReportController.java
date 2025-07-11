@@ -16,12 +16,12 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/admin/report")
-public class ReportController {
+public class AdminReportController {
     private final ReportService reportService;
     private final PdfReportService pdfReportService;
 
     @Autowired
-    public ReportController(ReportService reportService, PdfReportService pdfReportService) {
+    public AdminReportController(ReportService reportService, PdfReportService pdfReportService) {
         this.reportService = reportService;
         this.pdfReportService = pdfReportService;
     }
@@ -36,13 +36,8 @@ public class ReportController {
 
     @GetMapping("/generate-pdf")
     public ResponseEntity<byte[]> generatePdf(@RequestParam int year) throws IOException {
-        // Получаем данные отчёта (замените на реальный вызов сервиса получения отчёта)
         YearlyReportDTO yearlyReportDTO = reportService.generateYearlyReport(year);
-
-        // Генерация PDF отчёта
         byte[] pdfBytes = pdfReportService.generateYearlyReportPdf(yearlyReportDTO);
-
-        // Возвращаем PDF как файл
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"yearly_report_" + year + ".pdf\"")
                 .body(pdfBytes);

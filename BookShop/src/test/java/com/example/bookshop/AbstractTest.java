@@ -12,7 +12,7 @@ import static com.example.bookshop.util.ValidationUtil.getRootCause;
 
 @SpringBootTest
 @ActiveProfiles({"test"})
-//@Sql(scripts = "classpath:db/bookshop_data.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = "classpath:db/bookshop_data.sql", config = @SqlConfig(encoding = "UTF-8"))
 //@Transactional
 public abstract class AbstractTest {
     public static final int START_SEQ = 1;

@@ -23,7 +23,7 @@ public class AdminBookController {
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody BookAddDTO book) {
+    public void create(@RequestBody BookUpdateDTO book) {
         bookService.create(book);
     }
 

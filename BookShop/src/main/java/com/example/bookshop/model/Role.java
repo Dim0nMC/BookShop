@@ -3,12 +3,13 @@ package com.example.bookshop.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
-public class Role extends AbstractBaseEntity{
+public class Role extends AbstractBaseEntity implements GrantedAuthority {
 
     @OneToMany(mappedBy = "role")
     private List<User> users;
@@ -37,5 +38,10 @@ public class Role extends AbstractBaseEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + name;
     }
 }

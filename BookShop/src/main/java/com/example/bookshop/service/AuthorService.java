@@ -2,6 +2,7 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.model.Author;
 import com.example.bookshop.repository.AuthorRepository;
+import com.example.bookshop.util.exception.UserDeleteViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
@@ -10,6 +11,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static com.example.bookshop.util.ValidationUtil.checkNew;
 import static com.example.bookshop.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -25,6 +27,7 @@ public class AuthorService {
 
     public Author create(Author author){
         Assert.notNull(author, "Author must not be null");
+        checkNew(author);
         return authorRepository.save(author);
     }
 
@@ -50,6 +53,7 @@ public class AuthorService {
     }
 
     public void delete(int id){
+//        throw new UserDeleteViolationException("ERROR!!!");
         checkNotFoundWithId(authorRepository.delete(id) != 0, id);
     }
 }

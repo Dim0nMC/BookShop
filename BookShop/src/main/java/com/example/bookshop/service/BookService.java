@@ -2,6 +2,7 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.dto.BookAddDTO;
 import com.example.bookshop.dto.BookUpdateDTO;
+import com.example.bookshop.model.AbstractBaseEntity;
 import com.example.bookshop.model.Author;
 import com.example.bookshop.model.Book;
 import com.example.bookshop.model.Genre;
@@ -15,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.example.bookshop.util.ValidationUtil.checkNew;
+import static com.example.bookshop.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class BookService {
@@ -40,11 +41,13 @@ public class BookService {
     }
 
     public Book getById(int id) {
-        return bookRepository.findById(id).orElse(null);
+        return checkNotFoundWithId(bookRepository.findById(id).orElse(null), id);
+//        return bookRepository.findById(id).orElse(null);
     }
 
-    public List<Book> findByPart(String query) {
-        List<Book> books = new ArrayList<>();
+    public Set<Book> findByPart(String query) {
+// !!!       List<Book> books = new ArrayList<>();
+        Set<Book> books = new TreeSet<>(Comparator.comparing(Book::getName));
         String[] parts = query.split(" ");
         //for (String part : parts) {
             books.addAll(bookRepository.findByNameContainingIgnoreCase(query));
@@ -71,7 +74,9 @@ public class BookService {
     }
 
     @Transactional
-    public void create(BookAddDTO bookRequest) {
+    public Book create(BookUpdateDTO bookRequest) {
+        Assert.notNull(bookRequest, "Book must not be null");
+        checkNew(bookRequest);
         Book newBook = new Book();
 
         newBook.setName(bookRequest.getName());
@@ -118,7 +123,7 @@ public class BookService {
         System.out.println(genreObjects.toString());
         newBook.setGenres(genreObjects);
 
-        bookRepository.save(newBook);
+        return bookRepository.save(newBook);
     }
 
     @Transactional
@@ -126,7 +131,8 @@ public class BookService {
         Assert.notNull(bookRequest, "Book must not be null");
         Assert.notNull(bookRequest.getId(), "Book id must not be null");
 
-        Book updatedBook = bookRepository.findById(bookRequest.getId()).orElse(null);
+        Book updatedBook = getById(bookRequest.getId());
+//        Book updatedBook = bookRepository.findById(bookRequest.getId()).orElse(null);
 
         updatedBook.setName(bookRequest.getName());
         updatedBook.setPublished_data(bookRequest.getPublished_data());
@@ -160,19 +166,9 @@ public class BookService {
 
     @Transactional
     public void delete(int id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"));
-
-//        for (Author author : book.getAuthors()) {
-//            author.getBooks().remove(book);
-//            authorRepository.save(author);
-//        }
-//
-//        for (Genre genre : book.getGenres()) {
-//            genre.getBooks().remove(book);
-//            genreRepository.save(genre);
-//        }
-
-        bookRepository.delete(book);
+        checkNotFoundWithId(bookRepository.delete(id) != 0, id);
+//        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+//        bookRepository.delete(book);
     }
 
 }

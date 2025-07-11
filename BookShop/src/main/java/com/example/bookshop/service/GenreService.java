@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static com.example.bookshop.util.ValidationUtil.checkNew;
 import static com.example.bookshop.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -30,6 +31,7 @@ public class GenreService {
 
     public Genre create(Genre genre) {
         Assert.notNull(genre, "Genre must not be null");
+        checkNew(genre);
         return genreRepository.save(genre);
     }
 

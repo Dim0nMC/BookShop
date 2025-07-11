@@ -1,5 +1,6 @@
 package com.example.bookshop.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
 
@@ -16,6 +17,7 @@ public abstract class AbstractBaseEntity implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Schema(title = "The database generated entity ID")
     protected Integer id;
 
     public Integer getId() {

@@ -47,6 +47,8 @@ INSERT INTO genres (id, name) VALUES
     (9, 'повесть'),
     (10, 'рассказы');
 
+SELECT pg_catalog.setval('genres_seq', 15, true);
+
 
 -- Books
 INSERT INTO books (id, name, image, description, read_count, raiting, published_data, purchased_count, page_count, age_restriction, price) VALUES
@@ -81,6 +83,9 @@ INSERT INTO books (id, name, image, description, read_count, raiting, published_
     (29, 'Жизнь насекомых', 'uploads/cover.png', 'Аллегория человеческой жизни', 600, 4, '1993-01-01', 150, 288, 16, 250),
     (30, 'Недоросль', 'uploads/cover.png', 'Классическая комедия о воспитании', 500, 4, '1782-01-01', 100, 120, 12, 700);
 
+SELECT pg_catalog.setval('books_seq', 40, true);
+
+
 -- Примеры связей книг и авторов (несколько авторов у некоторых книг)
 INSERT INTO books_authors (author_id, book_id) VALUES
     (2, 1),
@@ -90,14 +95,14 @@ INSERT INTO books_authors (author_id, book_id) VALUES
     (8, 5),
     (9, 6),
     (10, 7),
-    (11, 8),
+    (11, 8), --!
     (12, 9),
     (3, 10),
     (16,11),
     (17,12),
     (6, 13),
-    (15, 14),
-    (15, 15),
+    (15, 14), --!
+--    (15, 15),
     (4, 16),
     (13, 17),
     (6, 18),
@@ -111,7 +116,7 @@ INSERT INTO books_authors (author_id, book_id) VALUES
     (1, 26),
     (3, 27),
     (3, 28),
-    (15, 29),
+--    (15, 29),
     (6, 30);
 -- Несколько авторов
 --(13, 14),
@@ -158,47 +163,49 @@ INSERT INTO roles (id, name) VALUES
 
 
 INSERT INTO users(id, age, role_id, name, email, password, phone, image) VALUES
-    (1, 22, 2, 'Admin', 'admin@gmail.com', '$2a$10$8RnxXKFG6Qot.YcO/Y9EOuEMO93gG8/8w7YcHt2GqF77CHVbhWBUm', '+79163053344', ''),
-    (101, 21, 1, 'User1', 'chel1@gmail.com', '$2a$10$8RnxXKFG6Qot.YcO/Y9EOuEMO93gG8/8w7YcHt2GqF77CHVbhWBUm', '+79163063741', 'uploads/avatar_1.png'),
-    (102, 42, 1, 'User2', 'chel2@gmail.com', '$2a$10$8RnxXKFG6Qot.YcO/Y9EOuEMO93gG8/8w7YcHt2GqF77CHVbhWBUm', '+79251278939', 'uploads/avatar_2.png');
+    (2, 22, 2, 'Admin', 'admin@gmail.com', '$2a$10$8RnxXKFG6Qot.YcO/Y9EOuEMO93gG8/8w7YcHt2GqF77CHVbhWBUm', '+79163053344', ''),
+    (1, 21, 1, 'User1', 'chel1@gmail.com', '$2a$10$8RnxXKFG6Qot.YcO/Y9EOuEMO93gG8/8w7YcHt2GqF77CHVbhWBUm', '+79163063741', 'uploads/avatar_1.png'),
+    (3, 42, 1, 'User2', 'chel2@gmail.com', '$2a$10$8RnxXKFG6Qot.YcO/Y9EOuEMO93gG8/8w7YcHt2GqF77CHVbhWBUm', '+79251278939', 'uploads/avatar_2.png');
+
+SELECT pg_catalog.setval('users_seq', 10, true);
 
 
 INSERT INTO books_users(user_id, book_id) VALUES
-    (101, 4),
-    (101, 5),
-    (101, 6),
-    (101, 7),
-    (101, 20),
-    (101, 21),
-    (101, 22),
-    (101, 13),
-    (101, 15),
-    (101, 1),
-    (101, 3),
-    (101, 18),
-    (101, 2),
-    (101, 19),
-    (101, 24),
-    (102, 11),
-    (102, 25),
-    (102, 26);
+    (1, 4),
+    (1, 5),
+    (1, 6),
+    (1, 7),
+    (1, 20),
+    (1, 21),
+    (1, 22),
+    (1, 13),
+    (1, 15),
+    (1, 1),
+    (1, 3),
+    (1, 18),
+    (1, 2),
+    (1, 19),
+    (1, 24),
+    (3, 11),
+    (3, 25),
+    (3, 26);
 
 
 
 
 INSERT INTO orders(id, cost, date, payment_date, user_id, status) VALUES
-    (1, 850, '2024-02-01', '2024-03-05', 101, 'Оплачен'),
-    (2, 500, '2024-04-01', '2024-04-10', 101, 'Оплачен'),
-    (3, 800, '2024-05-01', '2024-05-02', 101, 'Оплачен'),
-    (4, 450, '2024-06-06', '2024-06-15', 101, 'Оплачен'),
-    (5, 300, '2024-07-23', '2024-07-25', 102, 'Оплачен'),
-    (6, 1150, '2024-10-07', '2024-10-20', 101, 'Оплачен'),
-    (7, 700, '2024-12-03', '2024-12-23', 102, 'Оплачен'),
-    (8, 800, '2025-03-01', '2025-03-02', 101, 'Оплачен'),
-    (9, 250, '2025-05-01', '2025-05-03', 102, 'Оплачен'),
-    (10, 650, '2025-05-05', '2025-05-07', 102, 'Оплачен'),
-    (11, 750, '2025-05-10', NULL, 102, 'Не оплачен'),
-    (12, 350, '2025-05-20', NULL, 102, 'Не оплачен');
+    (1, 850, '2025-02-01', '2024-03-05', 1, 'Оплачен'),
+    (2, 500, '2025-04-01', '2024-04-10', 1, 'Оплачен'),
+    (3, 800, '2025-05-01', '2024-05-02', 2, 'Оплачен'),
+    (4, 450, '2025-01-06', '2024-06-15', 2, 'Оплачен'),
+    (5, 300, '2025-02-23', '2024-07-25', 2, 'Оплачен'),
+    (6, 1150, '2025-03-07', '2024-10-20', 1, 'Оплачен'),
+    (7, 700, '2025-04-03', '2024-12-23', 2, 'Оплачен'),
+    (8, 800, '2025-05-01', '2025-03-02', 1, 'Оплачен'),
+    (9, 250, '2025-02-01', '2025-05-03', 2, 'Оплачен'),
+    (10, 650, '2025-05-05', '2025-05-07', 2, 'Оплачен'),
+    (11, 750, '2025-03-10', NULL, 1, 'Не оплачен'),
+    (12, 350, '2025-05-20', NULL, 2, 'Не оплачен');
 
 INSERT INTO order_details (order_id, book_id, price) VALUES
     (8, 22, 250),
@@ -246,12 +253,12 @@ INSERT INTO order_details (order_id, book_id, price) VALUES
 
 
 INSERT INTO cart(user_id, book_id) VALUES
-    (101, 28),
-    (101, 29),
-    (101, 30),
-    (102, 18),
-    (102, 19),
-    (102, 7);
+    (1, 28),
+    (1, 29),
+    (1, 30),
+    (3, 18),
+    (3, 19),
+    (3, 7);
 
 
 

@@ -1,6 +1,7 @@
 package com.example.bookshop.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,8 @@ import java.util.Set;
 @Table(name = "authors")
 public class Author extends AbstractBaseEntity {
 
-    @ManyToMany(mappedBy = "authors")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
     private Set<Book> books;
 
     @NotBlank
@@ -31,6 +33,13 @@ public class Author extends AbstractBaseEntity {
         this.id = id;
         this.name = name;
         this.surname = surname;
+    }
+
+    public Author(Integer id, String name, String surname, String about) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.about = about;
     }
 
     public Author(Set<Book> books, String name, String surname, String about) {

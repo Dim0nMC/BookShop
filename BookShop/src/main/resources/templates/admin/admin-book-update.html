@@ -46,13 +46,13 @@
         <textarea id="description" maxlength="10000" rows="5"></textarea>
     </label>
 
-    <label>Рейтинг:
+   <!-- <label>Рейтинг:
         <input type="number" id="raiting" min="0" max="5" step="0.1" required>
     </label>
 
     <label>Количество прочтений:
         <input type="number" id="read_count" min="0" required>
-    </label>
+    </label>-->
 
     <label>Количество покупок:
         <input type="number" id="purchased_count" min="0" required>
@@ -114,8 +114,8 @@
             age_restriction: parseInt(document.getElementById('age_restriction').value),
             page_count: parseInt(document.getElementById('page_count').value),
             description: document.getElementById('description').value,
-            raiting: parseFloat(document.getElementById('raiting').value),
-            read_count: parseInt(document.getElementById('read_count').value),
+            raiting: 5,
+            read_count: 5,
             purchased_count: parseInt(document.getElementById('purchased_count').value),
             genres: Array.from(new Set(selectedGenres)),
             authors: Array.from(new Set(selectedAuthors))
@@ -155,8 +155,8 @@
                 document.getElementById('age_restriction').value = book.age_restriction;
                 document.getElementById('page_count').value = book.page_count;
                 document.getElementById('description').value = book.description;
-                document.getElementById('raiting').value = book.raiting;
-                document.getElementById('read_count').value = book.read_count;
+                // document.getElementById('raiting').value = book.raiting;
+                // document.getElementById('read_count').value = book.read_count;
                 document.getElementById('purchased_count').value = book.purchased_count;
                 document.getElementById('imagePath').value = book.image || '';
 

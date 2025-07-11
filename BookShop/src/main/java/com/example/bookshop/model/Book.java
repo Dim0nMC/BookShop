@@ -1,6 +1,8 @@
 package com.example.bookshop.model;
 
 import com.example.bookshop.dto.BookDisplay;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -14,6 +16,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "books")
+@Schema(description = "All details about the Book entity.")
 public class Book extends AbstractBaseEntity {
 
     @ManyToMany
@@ -42,6 +45,7 @@ public class Book extends AbstractBaseEntity {
 
     @NotBlank
     @Size(min = 1, max = 255)
+    @Schema(title = "The entity name")
     private String name;
 
     private Integer price;
@@ -88,6 +92,23 @@ public class Book extends AbstractBaseEntity {
         this.raiting = 0;
         this.read_count = 0;
         this.purchased_count = 0;
+    }
+
+    public Book(Integer id, Set<Genre> genres, Set<Author> authors, String name, LocalDate published_data,
+                int age_restriction, int page_count, double raiting, int read_count,
+                int purchased_count, int price, String description) {
+        super(id);
+        this.genres = genres;
+        this.authors = authors;
+        this.name = name;
+        this.published_data = published_data;
+        this.age_restriction = age_restriction;
+        this.page_count = page_count;
+        this.raiting = raiting;
+        this.read_count = read_count;
+        this.purchased_count = purchased_count;
+        this.price = price;
+        this.description = description;
     }
 
     public Book(Set<Genre> genres, Set<Author> authors, Set<User> users, Set<OrderDetails> orderDetailsSet, String name, String image, LocalDate published_data, int age_restriction, int page_count, String description, double raiting, int read_count, int purchased_count) {

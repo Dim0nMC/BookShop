@@ -1,14 +1,14 @@
 package com.example.bookshop.controller.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindException;
+
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,12 +17,10 @@ import com.example.bookshop.util.ValidationUtil;
 import com.example.bookshop.util.exception.*;
 
 import jakarta.persistence.PersistenceException;
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestControllerAdvice(annotations = RestController.class)
-@Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class GlobalControllerExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
@@ -49,19 +47,18 @@ public class GlobalControllerExceptionHandler {
             "users_email_unique_idx", EXCEPTION_DUPLICATE_USER_EMAIL);
 
     @ExceptionHandler(NotFoundException.class)
-    ResponseEntity<?> dataNotFoundError(HttpServletRequest req, NotFoundException e) {
-        return logAndGetErrorInfo(req, e, MSG_DATA_NOT_FOUND);
+    ResponseEntity<?> dataNotFoundError(NotFoundException e, HttpServletRequest req) {
+        return logAndGetErrorInfo(req, e, MSG_DATA_NOT_FOUND, "");
     }
 
 
     @ExceptionHandler(UserDeleteViolationException.class)
-    ResponseEntity<?> userDeleteViolation(HttpServletRequest req, UserDeleteViolationException e) {
-        return logAndGetErrorInfo(req, e, MSG_WRONG_REQUEST);
+    ResponseEntity<?> userDeleteViolation(UserDeleteViolationException e, HttpServletRequest req) {
+        return logAndGetErrorInfo(req, e, MSG_WRONG_REQUEST, "");
     }
-
     @ExceptionHandler(UserUpdateViolationException.class)
-    ResponseEntity<?> userUpdateViolation(HttpServletRequest req, UserUpdateViolationException e) {
-        return logAndGetErrorInfo(req, e, MSG_WRONG_REQUEST);
+    ResponseEntity<?> userUpdateViolation(UserUpdateViolationException e, HttpServletRequest req) {
+        return logAndGetErrorInfo(req, e, MSG_WRONG_REQUEST, "");
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class, PersistenceException.class})
@@ -70,30 +67,37 @@ public class GlobalControllerExceptionHandler {
         if (rootMessage != null) {
             for (Map.Entry<String, String> entry : CONSTRAINTS_MSG.entrySet()) {
                 if (rootMessage.toLowerCase().contains(entry.getKey())) {
-                    return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR + " (" + entry.getValue() + ")");
+                    return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR, entry.getValue());
                 }
             }
         }
         if (e instanceof DataIntegrityViolationException || e.getMessage().toLowerCase().contains("constraintviolationexception")) {
-            return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR + " (" + EXCEPTION_DATA_INTEGRITY_VIOLATION + ")");
+            return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR, EXCEPTION_DATA_INTEGRITY_VIOLATION);
         }
-        return logAndGetErrorInfo(req, e, MSG_DATA_ERROR);
+        return logAndGetErrorInfo(req, e, MSG_DATA_ERROR, "");
     }
 
-    @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    ResponseEntity<?> dataConstraintViolation(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR, "");
+    }
+
+    @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<?> illegalRequestDataError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR);
+        return logAndGetErrorInfo(req, e, MSG_VALIDATION_ERROR, "");
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, MSG_APP_ERROR);
+        return logAndGetErrorInfo(req, e, MSG_APP_ERROR, "");
     }
 
-    ResponseEntity<?> logAndGetErrorInfo(HttpServletRequest req, Exception e, String messageText) {
+    ResponseEntity<?> logAndGetErrorInfo(HttpServletRequest req, Exception e, String messageText, String details) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         HttpStatus status = ERRORS.get(messageText);
         log.warn("Error at request  {}: {} (status: {})", req.getRequestURL(), rootCause.toString(), status.toString());
+        messageText = (details != null && !details.isEmpty()) ? messageText + " (" + details + ")" : messageText;
         return ResponseEntity.status(status).body(Map.of("error", messageText));
     }
 }

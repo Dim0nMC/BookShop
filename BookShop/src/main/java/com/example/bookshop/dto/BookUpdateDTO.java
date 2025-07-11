@@ -1,15 +1,13 @@
 package com.example.bookshop.dto;
 
-import com.example.bookshop.model.Author;
-import com.example.bookshop.model.Book;
-import com.example.bookshop.model.Genre;
+import com.example.bookshop.model.*;
 
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BookUpdateDTO {
-    private  int id;
+public class BookUpdateDTO extends AbstractBaseEntity {
+//    private  int id;
     private String name;
     private Integer price;
     private String image;
@@ -44,8 +42,9 @@ public class BookUpdateDTO {
 
     @Override
     public String toString() {
-        return "BookAddDTO{" +
-                "name='" + name + '\'' +
+        return "BookUpdateDTO{" +
+                "id='" + id + '\'' +
+                ", name=" + name +
                 ", price=" + price +
                 ", image='" + image + '\'' +
                 ", published_data='" + published_data + '\'' +
@@ -60,9 +59,9 @@ public class BookUpdateDTO {
                 '}';
     }
 
-    public int getId() {
-        return id;
-    }
+//    public int getId() {
+//        return id;
+//    }
 
     public void setId(int id) {
         this.id = id;
